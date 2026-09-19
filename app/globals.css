@@ -1,0 +1,311 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-soft: var(--brand-soft);
+  --color-cyan-accent: var(--cyan-accent);
+  --color-navy: var(--navy);
+  --color-navy-soft: var(--navy-soft);
+  --color-navy-deep: var(--navy-deep);
+  --color-surface: var(--surface);
+  --color-fg-muted: var(--fg-muted);
+  --color-provider-spotify: var(--provider-spotify);
+  --color-provider-netflix: var(--provider-netflix);
+  --color-provider-disney: var(--provider-disney);
+  --color-provider-youtube: var(--provider-youtube);
+  --color-provider-adobe: var(--provider-adobe);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-num);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: var(--surface);
+  --foreground: var(--navy-deep);
+  --card: #ffffff;
+  --card-foreground: var(--navy-deep);
+  --popover: #ffffff;
+  --popover-foreground: var(--navy-deep);
+  --primary: var(--navy);
+  --primary-foreground: #ffffff;
+  --secondary: #eef1f8;
+  --secondary-foreground: var(--navy-deep);
+  --muted: #eef1f8;
+  --muted-foreground: var(--fg-muted);
+  --accent: var(--brand);
+  --accent-foreground: var(--brand-foreground);
+  --destructive: #d63b2f;
+  --border: #e3e8f2;
+  --input: #e3e8f2;
+  --ring: var(--brand);
+  --radius: 1rem;
+
+  /* Ušetři brand system */
+  --navy-deep: #050b1a;
+  --navy: #0d1b36;
+  --navy-soft: #16294f;
+  --surface: #f7f9fc;
+  --brand: #00d99a;
+  --brand-soft: #7cf3ce;
+  --brand-foreground: #00251a;
+  --cyan-accent: #4ec8ff;
+  --fg-muted: #5b6478;
+
+  /* Provider brand colors */
+  --provider-spotify: #1db954;
+  --provider-netflix: #e50914;
+  --provider-disney: #0063e5;
+  --provider-youtube: #ff0033;
+  --provider-adobe: #eb1000;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+}
+
+/* ---------- surfaces ---------- */
+
+.surface-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 2px rgba(5, 11, 26, 0.04), 0 12px 32px -16px rgba(5, 11, 26, 0.14);
+}
+
+.surface-card-lg {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 8px rgba(5, 11, 26, 0.04), 0 24px 48px -20px rgba(5, 11, 26, 0.18);
+}
+
+.glass-dark {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+}
+
+/* ---------- ambient backdrop ---------- */
+
+.bg-grid-dark {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 68px 68px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 35%, #000 20%, transparent 78%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 35%, #000 20%, transparent 78%);
+}
+
+.bg-grid-light {
+  background-image:
+    linear-gradient(to right, rgba(5, 11, 26, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(5, 11, 26, 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 10%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 10%, transparent 75%);
+}
+
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.22;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+}
+
+/* ---------- iPhone mockup ---------- */
+
+.phone-shell {
+  padding: 3px;
+  border-radius: 58px;
+  background: linear-gradient(
+    145deg,
+    #e7eaf0 0%,
+    #9aa1ad 12%,
+    #f4f6fa 26%,
+    #767d8a 44%,
+    #cfd4dd 62%,
+    #7b828f 80%,
+    #e9ecf2 100%
+  );
+  box-shadow:
+    0 2px 4px rgba(5, 11, 26, 0.3),
+    0 50px 90px -30px rgba(5, 11, 26, 0.65),
+    0 10px 30px -10px rgba(0, 217, 154, 0.18);
+}
+
+.phone-body {
+  padding: 9px;
+  border-radius: 55px;
+  background: #05060a;
+  position: relative;
+}
+
+.phone-screen {
+  position: relative;
+  border-radius: 46px;
+  overflow: hidden;
+  background: #ffffff;
+  isolation: isolate;
+}
+
+.phone-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    118deg,
+    rgba(255, 255, 255, 0.34) 0%,
+    rgba(255, 255, 255, 0.08) 18%,
+    rgba(255, 255, 255, 0) 38%,
+    rgba(255, 255, 255, 0) 72%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  mix-blend-mode: screen;
+}
+
+.phone-button {
+  position: absolute;
+  width: 2.5px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #5c6470, #9aa2ae 40%, #4e555f 75%, #7d8490);
+  opacity: 0.9;
+}
+
+/* ---------- motion ---------- */
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 38s linear infinite;
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
+}
+
+.animate-float {
+  animation: float-y 7s ease-in-out infinite;
+}
+
+@keyframes drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6%, -4%, 0) scale(1.12);
+  }
+}
+
+@keyframes drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.05);
+  }
+  50% {
+    transform: translate3d(-7%, 5%, 0) scale(0.95);
+  }
+}
+
+.animate-drift-a {
+  animation: drift-a 22s ease-in-out infinite;
+}
+
+.animate-drift-b {
+  animation: drift-b 26s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+.text-shimmer {
+  background: linear-gradient(90deg, var(--brand) 0%, var(--brand-soft) 45%, var(--cyan-accent) 70%, var(--brand) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-float,
+  .animate-drift-a,
+  .animate-drift-b,
+  .text-shimmer {
+    animation: none;
+  }
+}
