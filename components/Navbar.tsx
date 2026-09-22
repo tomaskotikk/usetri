@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { Mascot } from './illustrations/Mascot'
 
 const links = [
   { label: 'Předplatná', href: '/predplatna' },
@@ -30,10 +31,12 @@ export function Navbar() {
       <div className="mx-auto max-w-6xl flex items-center justify-between px-4">
         <Link
           href="/"
-          className={`font-display font-extrabold text-xl tracking-tight transition-colors ${
+          className={`group flex items-center gap-1.5 font-display font-extrabold text-xl tracking-tight transition-colors ${
             light ? 'text-navy-deep' : 'text-white'
           }`}
         >
+          {/* Ušetřík sits in the wordmark — the dot of the logo made flesh. */}
+          <Mascot size={34} mood="idle" className="-my-2 shrink-0" />
           Ušetři<span className="text-brand">.</span>
         </Link>
 

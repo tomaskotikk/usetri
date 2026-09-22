@@ -28,7 +28,7 @@ export function CtaBand() {
 
         <div className="relative grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
           <div>
-            <Mascot size={104} mood="wave" className="-ml-3 mb-2" />
+            <Mascot size={132} mood="cheer" holds="coin" className="-ml-4 mb-2" />
             <h2 className="font-display font-extrabold text-4xl md:text-5xl leading-[1.05] tracking-tight">
               Začni šetřit
               <br />

@@ -13,7 +13,7 @@ export async function PopularServices() {
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-12">
           <div>
-            <Mascot size={88} mood="search" className="-ml-2 mb-1" />
+            <Mascot size={112} mood="search" className="-ml-3 mb-1" />
             <p className="text-xs uppercase tracking-[0.2em] text-brand font-semibold mb-3">
               Nejžádanější právě teď
             </p>

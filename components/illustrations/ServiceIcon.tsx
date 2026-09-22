@@ -1,3 +1,4 @@
+import { BrandGlyph, hasGlyph } from './BrandGlyph'
 import { providerMeta } from './BrandGlyphs'
 import type { Service } from '@/types/service'
 
@@ -27,7 +28,9 @@ export function ServiceIcon({
   onDark?: boolean
 }) {
   const s = sizes[size]
-  const Glyph = service.glyph ? providerMeta[service.glyph].Glyph : null
+  /* The slug table covers the whole catalogue; the older per-brand components stay
+     as a fallback for anything it hasn't caught up with. */
+  const Glyph = !hasGlyph(service.slug) && service.glyph ? providerMeta[service.glyph].Glyph : null
 
   return (
     <span
@@ -40,7 +43,9 @@ export function ServiceIcon({
       }}
       aria-hidden="true"
     >
-      {Glyph ? (
+      {hasGlyph(service.slug) ? (
+        <BrandGlyph slug={service.slug} className={s.glyph} />
+      ) : Glyph ? (
         <Glyph className={s.glyph} />
       ) : (
         <span className={`font-display font-extrabold ${s.text} leading-none tracking-tight`}>

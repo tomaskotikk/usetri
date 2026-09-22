@@ -118,6 +118,37 @@ export async function requireUser() {
   return { supabase, user }
 }
 
+/**
+ * The picture Google hands us on sign-in, as it arrives in the session. Supabase
+ * calls it `avatar_url` for some providers and `picture` for others.
+ */
+export function avatarFromSession(meta: Record<string, unknown> | undefined) {
+  const url = (meta?.avatar_url as string) || (meta?.picture as string)
+  return url?.trim() ? url : null
+}
+
+/**
+ * Copies the provider's picture onto the user's profile row.
+ *
+ * Member avatars all over the app read `profiles.avatar_url`, but nothing ever
+ * wrote it — only the viewer's own session carried a picture, so everyone else
+ * showed initials. This closes that gap. It writes only when the value actually
+ * changed, so the common case costs one select and no write.
+ */
+export async function syncProfileAvatar(
+  supabase: Awaited<ReturnType<typeof requireUser>>['supabase'],
+  userId: string,
+  meta: Record<string, unknown> | undefined,
+) {
+  const avatar = avatarFromSession(meta)
+  if (!avatar) return
+
+  const { data } = await supabase.from('profiles').select('avatar_url').eq('id', userId).maybeSingle()
+  if (data?.avatar_url === avatar) return
+
+  await supabase.from('profiles').update({ avatar_url: avatar }).eq('id', userId)
+}
+
 type Supabase = Awaited<ReturnType<typeof requireUser>>['supabase']
 
 /** group id → the viewer's role in it, for the "join" / "you're in" states. */

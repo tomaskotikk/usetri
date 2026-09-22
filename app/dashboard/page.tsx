@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { Compass, PiggyBank, PlusCircle, Sparkles, Users, Wallet } from 'lucide-react'
 import { AnimatedNumber } from '@/components/AnimatedNumber'
+import { AppHeader } from '@/components/dashboard/AppHeader'
 import { EmptyState } from '@/components/dashboard/EmptyState'
+import { Mascot } from '@/components/illustrations/Mascot'
 import { OfferCard } from '@/components/dashboard/OfferCard'
 import { PageHeader, SectionHeading } from '@/components/dashboard/PageHeader'
 import { Reveal } from '@/components/dashboard/Reveal'
-import { getMyOffers, getOffers, requireUser, summarise } from '@/lib/dashboard'
+import { avatarFromSession, getMyOffers, getOffers, requireUser, summarise } from '@/lib/dashboard'
 import { formatCzk } from '@/lib/format'
 
 export const metadata: Metadata = { title: 'Přehled — Ušetři' }
@@ -22,9 +24,25 @@ export default async function DashboardPage() {
   const recommended = fresh.filter((o) => o.role === null && o.seatsTaken < o.seatsTotal).slice(0, 4)
   const alone = stats.monthly + stats.saved
 
+  const meta = user.user_metadata ?? {}
+
   return (
     <div className="space-y-10">
+      {/* Breaks out of the main padding so the app header runs edge to edge. */}
+      <div className="-mx-4 -mt-8 sm:-mx-8 lg:hidden">
+        <AppHeader
+          user={{
+            name: (meta.full_name as string) || (meta.name as string) || user.email || 'Můj účet',
+            email: user.email ?? '',
+            avatar: avatarFromSession(meta),
+          }}
+          firstName={firstName}
+          stats={stats}
+        />
+      </div>
+
       <PageHeader
+        className="hidden lg:flex"
         eyebrow="Přehled"
         title={firstName ? `Ahoj, ${firstName}.` : 'Ahoj.'}
         subtitle={
@@ -35,7 +53,7 @@ export default async function DashboardPage() {
         action={{ href: '/dashboard/nova', label: 'Nabídnout místo' }}
       />
 
-      <Reveal>
+      <Reveal className="hidden lg:block">
         <section className="relative isolate overflow-hidden rounded-3xl p-6 text-white sm:p-8">
           <div
             className="absolute inset-0 -z-10"
@@ -59,6 +77,13 @@ export default async function DashboardPage() {
             </div>
 
             <div className="flex items-center gap-6">
+              {/* Ušetřík cheers over the savings figure — the same character the app shows. */}
+              <Mascot
+                size={124}
+                mood={stats.saved > 0 ? 'cheer' : 'idle'}
+                holds="bag"
+                className="hidden shrink-0 xl:block"
+              />
               <SavingsRing percent={stats.savedPercent} />
               <dl className="space-y-4">
                 <div>
@@ -77,7 +102,7 @@ export default async function DashboardPage() {
         </section>
       </Reveal>
 
-      <section className="grid gap-3 sm:grid-cols-3">
+      <section className="hidden gap-3 sm:grid-cols-3 lg:grid">
         {[
           { icon: Wallet, label: 'Měsíční platba', value: formatCzk(stats.monthly), note: `${stats.groups} skupin` },
           { icon: PiggyBank, label: 'Roční úspora', value: formatCzk(stats.saved * 12), note: 'oproti samostatným', accent: true },

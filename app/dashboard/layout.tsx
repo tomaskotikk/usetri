@@ -1,14 +1,17 @@
 import { MobileNav, MobileTopBar, Sidebar, type DashboardUser } from '@/components/dashboard/Sidebar'
-import { requireUser } from '@/lib/dashboard'
+import { avatarFromSession, requireUser, syncProfileAvatar } from '@/lib/dashboard'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { user } = await requireUser()
+  const { supabase, user } = await requireUser()
 
   const meta = user.user_metadata ?? {}
+  // So the rest of the app can show this face too, not just the viewer's own corner.
+  await syncProfileAvatar(supabase, user.id, meta)
+
   const profile: DashboardUser = {
     name: (meta.full_name as string) || (meta.name as string) || user.email || 'Můj účet',
     email: user.email ?? '',
-    avatar: ((meta.avatar_url as string) || (meta.picture as string)) ?? null,
+    avatar: avatarFromSession(meta),
   }
 
   return (

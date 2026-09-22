@@ -6,14 +6,16 @@ export function PageHeader({
   title,
   subtitle,
   action,
+  className = '',
 }: {
   eyebrow: string
   title: React.ReactNode
   subtitle?: string
   action?: { href: string; label: string }
+  className?: string
 }) {
   return (
-    <header className="flex flex-wrap items-end justify-between gap-4">
+    <header className={`flex-wrap items-end justify-between gap-4 ${className || 'flex'}`}>
       <div>
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-foreground/70">
           {eyebrow}

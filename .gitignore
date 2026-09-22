@@ -42,3 +42,6 @@ next-env.d.ts
 
 # brainstorming companion (per-session mockups, not project source)
 .superpowers/
+
+# mobilni app (vlastni git repo: usetri-mobile.git)
+usetri-mobile/

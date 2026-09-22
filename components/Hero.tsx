@@ -72,7 +72,7 @@ export function Hero() {
         mouseX.set(0)
         mouseY.set(0)
       }}
-      className="relative isolate overflow-hidden min-h-screen flex items-center pt-28 pb-32 px-4 text-white"
+      className="relative isolate overflow-hidden min-h-screen flex items-center pt-24 sm:pt-28 pb-32 px-4 text-white"
       style={{ perspective: 2200 }}
     >
       <Backdrop variant="dark" />
@@ -103,10 +103,6 @@ export function Hero() {
           animate="show"
           className="relative z-10"
         >
-          <motion.div variants={riseIn} className="mb-1">
-            <Mascot size={110} mood="wave" className="-ml-3" />
-          </motion.div>
-
           <motion.div
             variants={riseIn}
             className="glass-dark inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-medium text-white/80 mb-7"
@@ -178,6 +174,18 @@ export function Hero() {
           <div className="absolute -inset-16 rounded-full bg-navy-deep/45 blur-3xl -z-10" />
           <div className="animate-float">
             <PhoneMockup />
+          </div>
+
+          {/*
+           * Ušetřík hides behind the phone and leans out waving. Negative z puts him
+           * under the mockup but still over the halo, so only the half that clears
+           * the frame is visible. The tilt lives on this wrapper because framer-motion
+           * writes `transform` inline on the mascot itself and would drop a utility
+           * class rotation. Desktop only — below lg the phone and globe already crowd
+           * the viewport and he has nowhere to stand.
+           */}
+          <div className="hidden lg:block absolute -top-28 -left-24 -z-10 -rotate-[14deg] pointer-events-none">
+            <Mascot size={190} mood="wave" />
           </div>
         </motion.div>
       </div>

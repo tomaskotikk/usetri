@@ -1,8 +1,9 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Compass, LayoutDashboard, LogOut, PlusCircle, UserRound, Users } from 'lucide-react'
+import { Compass, Home, LayoutDashboard, LogOut, Plus, PlusCircle, UserRound, Users } from 'lucide-react'
 import { GlobeCanvas } from '@/components/illustrations/GlobeCanvas'
+import { Mascot } from '@/components/illustrations/Mascot'
 import { logout } from '@/app/auth/actions'
 
 const links = [
@@ -11,6 +12,14 @@ const links = [
   { href: '/dashboard/nova', label: 'Nabídnout', icon: PlusCircle },
   { href: '/dashboard/moje', label: 'Moje skupiny', icon: Users },
   { href: '/dashboard/ucet', label: 'Účet', icon: UserRound },
+]
+
+/** The phone bar carries the app's four tabs, in the app's order and wording. */
+const tabs = [
+  { href: '/dashboard', label: 'Domů', icon: Home },
+  { href: '/dashboard/nabidky', label: 'Objevit', icon: Compass },
+  { href: '/dashboard/moje', label: 'Skupiny', icon: Users },
+  { href: '/dashboard/ucet', label: 'Profil', icon: UserRound },
 ]
 
 function useActive() {
@@ -35,7 +44,11 @@ export function Sidebar({ user }: { user: DashboardUser }) {
         <GlobeCanvas className="h-full w-full" />
       </div>
 
-      <Link href="/" className="px-6 py-7 font-display text-xl font-extrabold tracking-tight">
+      <Link
+        href="/"
+        className="flex items-center gap-1.5 px-5 py-5 font-display text-xl font-extrabold tracking-tight"
+      >
+        <Mascot size={38} mood="idle" className="shrink-0" />
         Ušetři<span className="text-brand">.</span>
       </Link>
 
@@ -95,12 +108,25 @@ export function Sidebar({ user }: { user: DashboardUser }) {
   )
 }
 
-/** Phone header — the sidebar's branding and account link, condensed. */
+/**
+ * Phone header — the sidebar's branding and account link, condensed.
+ *
+ * The overview builds the app's full navy header itself (logo, greeting, mascot
+ * and the savings card in one block), so this strip stands down there to avoid
+ * stacking two headers.
+ */
 export function MobileTopBar({ user }: { user: DashboardUser }) {
+  const pathname = usePathname()
+  if (pathname === '/dashboard') return null
+
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-navy-deep/90 backdrop-blur-xl lg:hidden">
       <div className="flex items-center justify-between px-4 py-3">
-        <Link href="/" className="font-display text-lg font-extrabold tracking-tight text-white">
+        <Link
+          href="/"
+          className="flex items-center gap-1.5 font-display text-lg font-extrabold tracking-tight text-white"
+        >
+          <Mascot size={30} mood="idle" className="shrink-0" />
           Ušetři<span className="text-brand">.</span>
         </Link>
         <Link href="/dashboard/ucet" aria-label="Můj účet">
@@ -111,37 +137,75 @@ export function MobileTopBar({ user }: { user: DashboardUser }) {
   )
 }
 
-/** Bottom tab bar — the sidebar's stand-in below the lg breakpoint. */
+/**
+ * Bottom tab bar — the sidebar's stand-in below the lg breakpoint, and a copy of
+ * the Expo app's: four tabs around a raised create button, floating above the
+ * content on a rounded white bar rather than filling a slot at the edge.
+ */
 export function MobileNav() {
   const isActive = useActive()
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-navy-deep/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden">
-      <div className="mx-auto flex max-w-lg">
-        {links.map(({ href, label, icon: Icon }) => {
-          const active = isActive(href)
-          return (
-            <Link
-              key={href}
-              href={href}
-              aria-current={active ? 'page' : undefined}
-              className="relative flex flex-1 flex-col items-center gap-1 pb-2.5 pt-3 text-[10px] font-medium"
-            >
-              <span
-                className={`absolute inset-x-4 top-0 h-0.5 rounded-full bg-brand transition-opacity ${
-                  active ? 'opacity-100' : 'opacity-0'
-                }`}
-                aria-hidden="true"
-              />
-              <Icon
-                className={`h-5 w-5 transition-colors ${active ? 'text-brand' : 'text-white/45'}`}
-              />
-              <span className={active ? 'text-brand' : 'text-white/45'}>{label}</span>
-            </Link>
-          )
-        })}
+    <nav className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-3.5 pb-[max(env(safe-area-inset-bottom),12px)] lg:hidden">
+      <div className="pointer-events-auto mx-auto flex max-w-lg items-center justify-between rounded-[26px] border border-border bg-white px-2 pb-[7px] pt-[9px] shadow-[0_18px_40px_-16px_rgba(5,11,26,0.32)]">
+        {tabs.slice(0, 2).map((tab) => (
+          <Tab key={tab.href} {...tab} active={isActive(tab.href)} />
+        ))}
+
+        {/* The create action sits above the bar, ringed in the page background. */}
+        <Link
+          href="/dashboard/nova"
+          aria-label="Nabídnout místo"
+          className="-mt-[22px] mx-1.5 grid h-[54px] w-[54px] shrink-0 place-items-center rounded-[18px] border-4 border-surface bg-brand text-brand-foreground shadow-[0_18px_40px_-16px_rgba(5,11,26,0.32)] transition-transform active:scale-90"
+        >
+          <Plus className="h-6 w-6" />
+        </Link>
+
+        {tabs.slice(2).map((tab) => (
+          <Tab key={tab.href} {...tab} active={isActive(tab.href)} />
+        ))}
       </div>
     </nav>
+  )
+}
+
+/** One tab: it lifts, darkens and grows a mint dot when it becomes the current page. */
+function Tab({
+  href,
+  label,
+  icon: Icon,
+  active,
+}: {
+  href: string
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+  active: boolean
+}) {
+  return (
+    <Link
+      href={href}
+      aria-current={active ? 'page' : undefined}
+      className="flex flex-1 flex-col items-center gap-[3px] py-0.5 transition-transform active:scale-[0.92]"
+    >
+      <Icon
+        className={`h-[21px] w-[21px] transition-all duration-300 ${
+          active ? '-translate-y-[3px] scale-[1.08] text-navy-deep' : 'text-[#9aa3b4]'
+        }`}
+      />
+      <span
+        className={`text-[10.5px] font-semibold transition-colors ${
+          active ? 'text-navy-deep' : 'text-[#9aa3b4]'
+        }`}
+      >
+        {label}
+      </span>
+      <span
+        aria-hidden="true"
+        className={`h-1 w-1 rounded-full bg-brand transition-all duration-300 ${
+          active ? 'scale-100 opacity-100' : 'scale-[0.4] opacity-0'
+        }`}
+      />
+    </Link>
   )
 }
 
