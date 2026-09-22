@@ -11,6 +11,7 @@ import {
 } from 'framer-motion'
 import { ArrowRight, Hand, ShieldCheck, Star } from 'lucide-react'
 import { Backdrop } from './Backdrop'
+import { Mascot } from './illustrations/Mascot'
 import { GlobeCanvas } from './illustrations/GlobeCanvas'
 import { PhoneMockup } from './illustrations/PhoneMockup'
 import { providerMeta } from './illustrations/BrandGlyphs'
@@ -102,6 +103,10 @@ export function Hero() {
           animate="show"
           className="relative z-10"
         >
+          <motion.div variants={riseIn} className="mb-1">
+            <Mascot size={110} mood="wave" className="-ml-3" />
+          </motion.div>
+
           <motion.div
             variants={riseIn}
             className="glass-dark inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-medium text-white/80 mb-7"

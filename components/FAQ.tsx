@@ -1,5 +1,6 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Backdrop } from './Backdrop'
+import { Mascot } from './illustrations/Mascot'
 
 const faqs = [
   {
@@ -26,6 +27,7 @@ export function FAQ() {
       <Backdrop variant="light" />
       <div className="mx-auto max-w-6xl grid lg:grid-cols-[0.8fr_1.2fr] gap-12 lg:gap-16 relative">
         <div>
+          <Mascot size={96} mood="think" className="-ml-2 mb-1" />
           <p className="text-xs uppercase tracking-[0.2em] text-brand font-semibold mb-3">FAQ</p>
           <h2 className="font-display font-extrabold text-4xl md:text-5xl text-navy-deep tracking-tight">
             Časté otázky

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { AnimatedNumber } from './AnimatedNumber'
+import { Mascot } from './illustrations/Mascot'
 import { providerMeta } from './illustrations/BrandGlyphs'
 import { estimateAnnualSavings, estimateSharedCost } from '@/lib/savings'
 import type { GlyphKey } from '@/types/service'
@@ -39,6 +40,7 @@ export function SavingsCalculator() {
     <section id="kalkulacka" className="py-24 px-4 bg-white">
       <div className="mx-auto max-w-6xl grid lg:grid-cols-[1.05fr_1fr] gap-14 items-center">
         <div>
+          <Mascot size={92} mood="cheer" holds="bag" className="-ml-2 mb-1" />
           <p className="text-xs uppercase tracking-[0.2em] text-brand font-semibold mb-3">Kalkulačka</p>
           <h2 className="font-display font-extrabold text-4xl md:text-5xl text-navy-deep tracking-tight">
             Kolik bys ušetřil/a za rok?

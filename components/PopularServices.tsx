@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight, Users } from 'lucide-react'
 import { ServiceIcon } from './illustrations/ServiceIcon'
+import { Mascot } from './illustrations/Mascot'
 import { getPopularServices } from '@/lib/supabase-stub'
 import { pricePerSeat, savingsPercent, services } from '@/types/service'
 
@@ -12,6 +13,7 @@ export async function PopularServices() {
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-12">
           <div>
+            <Mascot size={88} mood="search" className="-ml-2 mb-1" />
             <p className="text-xs uppercase tracking-[0.2em] text-brand font-semibold mb-3">
               Nejžádanější právě teď
             </p>

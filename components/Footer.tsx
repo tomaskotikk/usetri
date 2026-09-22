@@ -1,8 +1,11 @@
+import { Mascot } from './illustrations/Mascot'
+
 export function Footer() {
   return (
     <footer className="border-t border-border bg-navy-deep text-white py-12 px-4">
       <div className="mx-auto max-w-5xl flex flex-col md:flex-row justify-between items-center gap-6">
-        <span className="font-display font-extrabold text-xl">
+        <span className="flex items-center gap-2 font-display font-extrabold text-xl">
+          <Mascot size={44} mood="sleep" />
           Ušetři<span className="text-brand">.</span>
         </span>
         <div className="flex gap-6 text-sm text-white/60">

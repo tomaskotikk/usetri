@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion'
 import { Search, CreditCard, UserPlus, PartyPopper } from 'lucide-react'
 import { Backdrop } from './Backdrop'
+import { Mascot } from './illustrations/Mascot'
 
 const steps = [
   {
@@ -31,6 +32,14 @@ export function HowItWorks() {
     <section id="jak-to-funguje" className="relative py-24 px-4 overflow-hidden">
       <Backdrop variant="light" />
       <div className="mx-auto max-w-6xl relative">
+        {/* Decorative: he sits beside the heading on wide screens only. */}
+        <Mascot
+          size={168}
+          mood="idle"
+          holds="coin"
+          className="hidden lg:block absolute right-0 -top-4 opacity-95"
+        />
+
         <header className="max-w-2xl mb-14">
           <p className="text-xs uppercase tracking-[0.2em] text-brand font-semibold mb-3">
             Jak to funguje

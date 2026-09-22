@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, ShieldCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Mascot } from './illustrations/Mascot'
 import { providerMeta } from './illustrations/BrandGlyphs'
 import type { GlyphKey } from '@/types/service'
 
@@ -27,6 +28,7 @@ export function CtaBand() {
 
         <div className="relative grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
           <div>
+            <Mascot size={104} mood="wave" className="-ml-3 mb-2" />
             <h2 className="font-display font-extrabold text-4xl md:text-5xl leading-[1.05] tracking-tight">
               Začni šetřit
               <br />
