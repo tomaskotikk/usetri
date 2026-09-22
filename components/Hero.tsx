@@ -1,5 +1,6 @@
 'use client'
 import Image from 'next/image'
+import Link from 'next/link'
 import {
   motion,
   useMotionValue,
@@ -9,7 +10,6 @@ import {
   type Variants,
 } from 'framer-motion'
 import { ArrowRight, Hand, ShieldCheck, Star } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { Backdrop } from './Backdrop'
 import { GlobeCanvas } from './illustrations/GlobeCanvas'
 import { PhoneMockup } from './illustrations/PhoneMockup'
@@ -123,20 +123,19 @@ export function Hero() {
           </h1>
 
           <motion.div variants={riseIn} className="mt-9 flex flex-wrap items-center gap-3">
-            <Button
-              size="lg"
-              className="h-14 rounded-2xl bg-brand text-brand-foreground hover:bg-brand-soft px-7 text-base font-semibold group"
+            <Link
+              href="/dashboard/nova"
+              className="group inline-flex h-14 items-center gap-1 rounded-2xl bg-brand px-7 text-base font-semibold text-brand-foreground transition-colors hover:bg-brand-soft"
             >
-              Založit akci
+              Nabídnout místo
               <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="h-14 rounded-2xl px-7 text-base bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white"
+            </Link>
+            <Link
+              href="/dashboard/nabidky"
+              className="inline-flex h-14 items-center rounded-2xl border border-white/20 bg-white/5 px-7 text-base font-medium text-white transition-colors hover:bg-white/10"
             >
               Najít skupinu
-            </Button>
+            </Link>
           </motion.div>
 
           <motion.div variants={riseIn} className="mt-10 flex items-center gap-4">

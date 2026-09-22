@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 
 const links = [
   { label: 'Předplatná', href: '/predplatna' },
@@ -52,15 +51,26 @@ export function Navbar() {
           ))}
         </nav>
 
-        <Button
-          className={`rounded-xl transition-colors ${
-            light
-              ? 'bg-navy-deep hover:bg-navy text-white'
-              : 'bg-brand text-brand-foreground hover:bg-brand-soft'
-          }`}
-        >
-          Založit akci
-        </Button>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/prihlaseni"
+            className={`hidden sm:block px-3 text-sm font-medium transition-colors ${
+              light ? 'text-fg-muted hover:text-navy-deep' : 'text-white/70 hover:text-white'
+            }`}
+          >
+            Přihlásit se
+          </Link>
+          <Link
+            href="/dashboard"
+            className={`inline-flex h-8 items-center rounded-xl px-2.5 text-sm font-medium transition-colors ${
+              light
+                ? 'bg-navy-deep hover:bg-navy text-white'
+                : 'bg-brand text-brand-foreground hover:bg-brand-soft'
+            }`}
+          >
+            Do aplikace
+          </Link>
+        </div>
       </div>
     </header>
   )
