@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/utils/supabase/client'
 import { login, signup, type AuthState } from '@/app/auth/actions'
+import { field } from './field'
 
 function GoogleIcon() {
   return (
@@ -17,9 +18,6 @@ function GoogleIcon() {
     </svg>
   )
 }
-
-const field =
-  'h-12 w-full rounded-xl border border-border bg-white pl-11 pr-4 text-[15px] text-navy-deep outline-none transition placeholder:text-fg-muted/60 focus:border-brand focus:ring-4 focus:ring-brand/15'
 
 export function AuthForm({ mode, callbackError }: { mode: 'login' | 'signup'; callbackError?: boolean }) {
   const isLogin = mode === 'login'
@@ -103,6 +101,17 @@ export function AuthForm({ mode, callbackError }: { mode: 'login' | 'signup'; ca
             {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
         </div>
+
+        {isLogin && (
+          <div className="flex justify-end">
+            <Link
+              href="/zapomenute-heslo"
+              className="text-sm font-medium text-fg-muted underline-offset-4 transition-colors hover:text-navy-deep hover:underline"
+            >
+              Zapomenuté heslo?
+            </Link>
+          </div>
+        )}
 
         {error && (
           <p role="alert" className="rounded-xl bg-destructive/10 px-4 py-2.5 text-sm text-destructive">

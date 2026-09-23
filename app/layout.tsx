@@ -21,10 +21,36 @@ const plexMono = IBM_Plex_Mono({
   weight: ["400", "500", "600"],
 });
 
+const DESCRIPTION =
+  "Spoj se s lidmi, rozdělte si oficiální rodinná předplatná Spotify, Netflix, Disney+ a dalších a plať jen svůj podíl.";
+
+/**
+ * Canonical and Open Graph URLs are resolved against this, so a missing value
+ * would silently publish links to localhost. Preview deployments can override it.
+ */
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://usetri.app";
+
 export const metadata: Metadata = {
-  title: "Ušetři — plať jen svůj podíl",
-  description:
-    "Spoj se s lidmi, rozdělte si oficiální rodinná předplatná Spotify, Netflix, Disney+ a dalších a plať jen svůj podíl.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Ušetři — plať jen svůj podíl",
+    template: "%s — Ušetři",
+  },
+  description: DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "cs_CZ",
+    url: "/",
+    siteName: "Ušetři",
+    title: "Ušetři — plať jen svůj podíl",
+    description: DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ušetři — plať jen svůj podíl",
+    description: DESCRIPTION,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

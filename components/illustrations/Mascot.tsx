@@ -3,6 +3,9 @@ import { motion, useReducedMotion } from 'framer-motion'
 
 export type MascotMood = 'idle' | 'wave' | 'cheer' | 'search' | 'sleep' | 'hang' | 'think'
 
+/** Where his feet land inside the box, for standing him on a line with other art. */
+export const FEET_RATIO = 101.5 / 120
+
 /** Body tones derived from the brand green, so the mascot reads as the logo's dot. */
 const SKIN = '#00d99a'
 const SKIN_DARK = '#00b885'
@@ -44,6 +47,7 @@ export function Mascot({
   mood = 'idle',
   holds,
   tongue = false,
+  still: stillProp = false,
   className,
 }: {
   size?: number
@@ -51,10 +55,12 @@ export function Mascot({
   /** What he carries in his right hand. The arm reaches for it either way. */
   holds?: 'coin' | 'bag'
   tongue?: boolean
+  /** Freezes him for logo sheets and exports, where a breathing SVG is wrong. */
+  still?: boolean
   className?: string
 }) {
   const reduceMotion = useReducedMotion()
-  const still = Boolean(reduceMotion)
+  const still = Boolean(reduceMotion) || Boolean(stillProp)
 
   const eyesShut = mood === 'cheer' || mood === 'sleep'
   const lookUp = mood === 'think' ? -2.5 : 0
@@ -187,7 +193,7 @@ export function Mascot({
               {holds === 'coin' ? (
                 <>
                   <circle cx={99} cy={81} r={14} fill="#fff" stroke={INK} strokeWidth={2.6} />
-                  <text x={99} y={86} fontSize={12} fontWeight="bold" fill={INK} textAnchor="middle">
+                  <text x={99} y={86} fontSize={12} fontWeight="bold" fill={INK} textAnchor="middle" fontFamily="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
                     Kč
                   </text>
                 </>
@@ -197,7 +203,7 @@ export function Mascot({
                   <path d={BAG_BODY} fill="#fff" stroke={INK} strokeWidth={2.6} strokeLinejoin="round" />
                   {/* The cord that cinches the sack shut, drawn over both seams. */}
                   <rect x={85} y={67} width={24} height={6.5} rx={3.25} fill={INK} />
-                  <text x={97} y={93} fontSize={12} fontWeight="bold" fill={INK} textAnchor="middle">
+                  <text x={97} y={93} fontSize={12} fontWeight="bold" fill={INK} textAnchor="middle" fontFamily="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
                     Kč
                   </text>
                 </>
