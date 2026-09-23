@@ -19,7 +19,7 @@ export async function GET(request: Request) {
 
     if (!error) {
       // A password recovery also lands here; a welcome then would be nonsense.
-      if (target !== '/nove-heslo') await welcomeOnce(supabase)
+      if (target !== '/nove-heslo') await welcomeOnce(supabase, origin)
       return NextResponse.redirect(`${origin}${target}`)
     }
   }
@@ -37,7 +37,7 @@ type Supabase = Awaited<ReturnType<typeof createClient>>
  * role key. It is written before the send: a lost e-mail is better than one
  * sent twice, and only a written flag guarantees that.
  */
-async function welcomeOnce(supabase: Supabase) {
+async function welcomeOnce(supabase: Supabase, origin: string) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -48,5 +48,5 @@ async function welcomeOnce(supabase: Supabase) {
   if (error) return
 
   const { email, user_metadata: meta } = user
-  after(() => sendWelcome(email, meta?.full_name ?? meta?.name))
+  after(() => sendWelcome(email, meta?.full_name ?? meta?.name, origin))
 }

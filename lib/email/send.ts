@@ -1,5 +1,5 @@
 import { Resend } from 'resend'
-import { esc, render, renderText, SITE, type Mail } from './layout'
+import { esc, render, renderText, siteUrl, type Mail } from './layout'
 
 const FROM = 'Ušetři <noreply@usetri.app>'
 
@@ -32,11 +32,13 @@ async function send(to: string, subject: string, mail: Mail) {
  * Goes out once, the first time an account actually reaches a session — whether
  * that was a confirmed e-mail sign-up or a Google sign-in.
  */
-export function sendWelcome(to: string, name?: string | null) {
+export function sendWelcome(to: string, name: string | null | undefined, origin?: string | null) {
   const first = name?.trim().split(/\s+/)[0]
   const greeting = first ? `Vítej, ${esc(first)}` : 'Vítej v Ušetři'
+  const site = siteUrl(origin)
 
   return send(to, 'Účet je aktivní — vítej v Ušetři', {
+    site,
     heading: greeting,
     intro: 'Účet máš hotový a aktivní. Od téhle chvíle platíš za předplatná jen svůj podíl.',
     points: [
@@ -44,7 +46,7 @@ export function sendWelcome(to: string, name?: string | null) {
       '<strong>Nebo založ vlastní</strong>, pokud už nějaký rodinný tarif platíš.',
       '<strong>Plať jen za sebe</strong> — každý má vlastní účet i heslo.',
     ],
-    button: { label: 'Přejít do aplikace', href: `${SITE}/dashboard` },
+    button: { label: 'Přejít do aplikace', href: `${site}/dashboard` },
     reason: 'Tenhle e-mail ti přišel, protože sis právě založil účet na usetri.app.',
   })
 }

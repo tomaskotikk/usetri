@@ -17,7 +17,16 @@ const FAINT = '#8a93a6'
 const BRAND = '#00d99a'
 const BORDER = '#e3e8f2'
 
-export const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://usetri.app'
+/**
+ * Where the links in an e-mail should point.
+ *
+ * Callers pass the origin of the request that triggered the mail, so a sign-up on
+ * localhost gets a button back to localhost. Only when there is no request to ask
+ * — a cron job, a webhook — does this fall back to the deployed address.
+ */
+export function siteUrl(origin?: string | null) {
+  return origin ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://usetri.app'
+}
 
 /** Escapes anything that came from a user before it lands in the markup. */
 export function esc(value: string) {
@@ -29,6 +38,8 @@ export function esc(value: string) {
 }
 
 export interface Mail {
+  /** Base address for every link in the message. */
+  site: string
   heading: string
   intro: string
   button?: { label: string; href: string }
@@ -98,7 +109,7 @@ export function render(mail: Mail) {
               <tr><td style="border-top:1px solid ${BORDER};padding:0;"></td></tr>
             </table>
             <p style="margin:20px 0 0 0;font-family:${SANS};font-size:12px;line-height:1.6;color:${FAINT};">
-              Ušetři — plať jen svůj podíl · <a href="${SITE}" style="color:${FAINT};">usetri.app</a><br />
+              Ušetři — plať jen svůj podíl · <a href="${mail.site}" style="color:${FAINT};">usetri.app</a><br />
               ${mail.reason}
             </p>
           </td>
@@ -121,7 +132,7 @@ export function renderText(mail: Mail) {
     ...(mail.button ? ['', `${mail.button.label}: ${mail.button.href}`] : []),
     '',
     '—',
-    `Ušetři — plať jen svůj podíl · ${SITE}`,
+    `Ušetři — plať jen svůj podíl · ${mail.site}`,
     mail.reason,
   ]
   return lines.join('\n')
