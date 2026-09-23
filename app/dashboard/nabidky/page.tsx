@@ -26,7 +26,7 @@ export default async function OffersPage({
     <div className="space-y-6">
       <PageHeader
         eyebrow="Tržiště"
-        title="Nabídky"
+        title="Objevit"
         subtitle="Volná místa v rodinných plánech, která nabízí ostatní členové."
         action={{ href: '/dashboard/nova', label: 'Nabídnout místo' }}
       />

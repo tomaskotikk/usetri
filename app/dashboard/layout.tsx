@@ -27,7 +27,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
         <MobileTopBar user={profile} />
 
-        <main className="relative mx-auto w-full max-w-5xl px-4 pb-32 pt-8 sm:px-8 lg:pb-16 lg:pt-12">
+        <main className="relative mx-auto w-full max-w-5xl px-5 pb-32 pt-6 sm:px-8 lg:pb-16 lg:pt-12">
           {children}
         </main>
       </div>

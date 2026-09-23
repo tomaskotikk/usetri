@@ -29,7 +29,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-10">
       {/* Breaks out of the main padding so the app header runs edge to edge. */}
-      <div className="-mx-4 -mt-8 sm:-mx-8 lg:hidden">
+      <div className="-mx-5 -mt-6 sm:-mx-8 lg:hidden">
         <AppHeader
           user={{
             name: (meta.full_name as string) || (meta.name as string) || user.email || 'Můj účet',

@@ -111,20 +111,23 @@ export function Sidebar({ user }: { user: DashboardUser }) {
 /**
  * Phone header — the sidebar's branding and account link, condensed.
  *
- * The overview builds the app's full navy header itself (logo, greeting, mascot
- * and the savings card in one block), so this strip stands down there to avoid
- * stacking two headers.
+ * Light rather than navy: in the Expo app only the home screen has a dark header,
+ * every other screen starts straight on the surface. A navy strip on the sub-pages
+ * made the web look like a different product.
+ *
+ * The overview builds the app's full navy header itself, so this strip stands
+ * down there to avoid stacking two headers.
  */
 export function MobileTopBar({ user }: { user: DashboardUser }) {
   const pathname = usePathname()
   if (pathname === '/dashboard') return null
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-navy-deep/90 backdrop-blur-xl lg:hidden">
+    <header className="sticky top-0 z-40 border-b border-border bg-surface/85 backdrop-blur-xl lg:hidden">
       <div className="flex items-center justify-between px-4 py-3">
         <Link
           href="/"
-          className="flex items-center gap-1.5 font-display text-lg font-extrabold tracking-tight text-white"
+          className="flex items-center gap-1.5 font-display text-lg font-extrabold tracking-tight text-navy-deep"
         >
           <Mascot size={30} mood="idle" className="shrink-0" />
           Ušetři<span className="text-brand">.</span>

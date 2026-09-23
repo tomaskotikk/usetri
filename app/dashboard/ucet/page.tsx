@@ -32,7 +32,7 @@ export default async function AccountPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="Účet" title="Můj profil" subtitle="Údaje, se kterými tě vidí ostatní členové." />
+      <PageHeader eyebrow="Účet" title="Profil" subtitle="Údaje, se kterými tě vidí ostatní členové." />
 
       <section className="rounded-3xl border border-border bg-card p-6">
         <div className="flex items-center gap-4">
