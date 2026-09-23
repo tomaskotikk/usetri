@@ -1,5 +1,7 @@
+import Link from 'next/link'
 import { Mascot } from './illustrations/Mascot'
 import { InstagramGlyph } from './illustrations/SocialGlyphs'
+import { LEGAL_PAGES } from '@/lib/legal'
 
 export const INSTAGRAM = {
   handle: '@usetri.app',
@@ -15,11 +17,13 @@ export function Footer() {
           Ušetři<span className="text-brand">.</span>
         </span>
 
-        <div className="flex gap-6 text-sm text-white/60">
-          <span>GDPR</span>
-          <span>Bezpečné platby</span>
-          <span>Podmínky</span>
-        </div>
+        <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white/60">
+          {LEGAL_PAGES.map((page) => (
+            <Link key={page.href} href={page.href} className="transition-colors hover:text-white">
+              {page.label}
+            </Link>
+          ))}
+        </nav>
 
         <div className="flex items-center gap-5">
           <a
