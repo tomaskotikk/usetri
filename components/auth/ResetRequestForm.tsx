@@ -2,9 +2,11 @@
 
 import { useActionState } from 'react'
 import Link from 'next/link'
-import { Loader2, Mail, MailCheck } from 'lucide-react'
+import { Loader2, Mail } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { requestPasswordReset, type AuthState } from '@/app/auth/actions'
+import { AuthError, AuthNotice } from './AuthNotice'
+import { AuthPanel } from './AuthPanel'
 import { field } from './field'
 
 export function ResetRequestForm() {
@@ -12,30 +14,20 @@ export function ResetRequestForm() {
 
   if (state?.notice) {
     return (
-      <div className="text-center">
-        <div className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-2xl bg-brand/15 text-brand">
-          <MailCheck className="h-8 w-8" />
-        </div>
-        <h1 className="font-display text-3xl font-extrabold tracking-tight text-navy-deep">Zkontroluj e-mail</h1>
-        <p className="mt-3 text-fg-muted">{state.notice}</p>
-        <p className="mt-2 text-sm text-fg-muted/80">Odkaz platí hodinu. Nepřišel? Mrkni do spamu.</p>
-        <Link
-          href="/prihlaseni"
-          className="mt-8 inline-block text-sm font-semibold text-navy-deep underline-offset-4 hover:underline"
-        >
-          Zpět na přihlášení
-        </Link>
-      </div>
+      <AuthNotice
+        title="Zkontroluj e-mail"
+        message={state.notice}
+        hint="Odkaz platí hodinu. Nepřišel? Mrkni do spamu."
+      />
     )
   }
 
   return (
-    <div>
-      <h1 className="font-display text-4xl font-extrabold leading-tight tracking-[-0.03em] text-navy-deep">
-        Zapomenuté heslo
-      </h1>
-      <p className="mt-2 text-fg-muted">Napiš e-mail a pošleme ti odkaz na nastavení nového hesla.</p>
-
+    <AuthPanel
+      mood="search"
+      title="Zapomenuté heslo"
+      subtitle="Napiš e-mail a pošleme ti odkaz na nastavení nového hesla."
+    >
       <form action={action} className="mt-8 space-y-3.5">
         <div className="relative">
           <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-fg-muted" />
@@ -50,11 +42,7 @@ export function ResetRequestForm() {
           />
         </div>
 
-        {state?.error && (
-          <p role="alert" className="rounded-xl bg-destructive/10 px-4 py-2.5 text-sm text-destructive">
-            {state.error}
-          </p>
-        )}
+        {state?.error && <AuthError>{state.error}</AuthError>}
 
         <Button
           type="submit"
@@ -72,6 +60,6 @@ export function ResetRequestForm() {
           Přihlas se
         </Link>
       </p>
-    </div>
+    </AuthPanel>
   )
 }

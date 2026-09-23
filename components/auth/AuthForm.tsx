@@ -1,11 +1,14 @@
 'use client'
-import { useActionState, useState } from 'react'
+import { useActionState } from 'react'
 import Link from 'next/link'
-import { Eye, EyeOff, Loader2, Lock, Mail, MailCheck, User } from 'lucide-react'
+import { Loader2, Mail, User } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/utils/supabase/client'
 import { login, signup, type AuthState } from '@/app/auth/actions'
+import { AuthError, AuthNotice } from './AuthNotice'
+import { AuthPanel } from './AuthPanel'
+import { PasswordField } from './PasswordField'
 import { field } from './field'
 
 function GoogleIcon() {
@@ -22,7 +25,7 @@ function GoogleIcon() {
 export function AuthForm({ mode, callbackError }: { mode: 'login' | 'signup'; callbackError?: boolean }) {
   const isLogin = mode === 'login'
   const [state, action, pending] = useActionState<AuthState, FormData>(isLogin ? login : signup, null)
-  const [show, setShow] = useState(false)
+
   const signInWithGoogle = async () => {
     const { error } = await createClient().auth.signInWithOAuth({
       provider: 'google',
@@ -30,32 +33,25 @@ export function AuthForm({ mode, callbackError }: { mode: 'login' | 'signup'; ca
     })
     if (error) toast.error('Přihlášení přes Google se nepovedlo.')
   }
+
   const error = state?.error ?? (callbackError ? 'Odkaz už není platný. Zkus to znovu.' : undefined)
 
   if (state?.notice) {
     return (
-      <div className="text-center">
-        <div className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-2xl bg-brand/15 text-brand">
-          <MailCheck className="h-8 w-8" />
-        </div>
-        <h1 className="font-display text-3xl font-extrabold tracking-tight text-navy-deep">Zkontroluj e-mail</h1>
-        <p className="mt-3 text-fg-muted">{state.notice}</p>
-        <Link href="/prihlaseni" className="mt-8 inline-block text-sm font-semibold text-navy-deep underline-offset-4 hover:underline">
-          Zpět na přihlášení
-        </Link>
-      </div>
+      <AuthNotice
+        title="Zkontroluj e-mail"
+        message={state.notice}
+        hint="Odkaz platí hodinu. Nepřišel? Mrkni do spamu."
+      />
     )
   }
 
   return (
-    <div>
-      <h1 className="font-display text-4xl font-extrabold leading-tight tracking-[-0.03em] text-navy-deep">
-        {isLogin ? 'Vítej zpátky.' : 'Začni šetřit.'}
-      </h1>
-      <p className="mt-2 text-fg-muted">
-        {isLogin ? 'Přihlas se a podívej se na své skupiny.' : 'Založ si účet a přidej se k první skupině.'}
-      </p>
-
+    <AuthPanel
+      mood={isLogin ? 'wave' : 'cheer'}
+      title={isLogin ? 'Vítej zpátky.' : 'Začni šetřit.'}
+      subtitle={isLogin ? 'Přihlas se a podívej se na své skupiny.' : 'Založ si účet a přidej se k první skupině.'}
+    >
       <Button
         type="button"
         variant="outline"
@@ -76,31 +72,28 @@ export function AuthForm({ mode, callbackError }: { mode: 'login' | 'signup'; ca
             <input name="name" required autoComplete="name" placeholder="Jméno" aria-label="Jméno" className={field} />
           </div>
         )}
+
         <div className="relative">
           <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-fg-muted" />
-          <input name="email" type="email" required autoComplete="email" placeholder="E-mail" aria-label="E-mail" className={field} />
-        </div>
-        <div className="relative">
-          <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-fg-muted" />
           <input
-            name="password"
-            type={show ? 'text' : 'password'}
+            name="email"
+            type="email"
             required
-            minLength={isLogin ? undefined : 8}
-            autoComplete={isLogin ? 'current-password' : 'new-password'}
-            placeholder={isLogin ? 'Heslo' : 'Heslo (min. 8 znaků)'}
-            aria-label="Heslo"
-            className={`${field} pr-12`}
+            autoComplete="email"
+            placeholder="E-mail"
+            aria-label="E-mail"
+            className={field}
           />
-          <button
-            type="button"
-            onClick={() => setShow((s) => !s)}
-            aria-label={show ? 'Skrýt heslo' : 'Zobrazit heslo'}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-fg-muted hover:text-navy-deep"
-          >
-            {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-          </button>
         </div>
+
+        <PasswordField
+          name="password"
+          label="Heslo"
+          placeholder={isLogin ? 'Heslo' : 'Heslo (min. 8 znaků)'}
+          autoComplete={isLogin ? 'current-password' : 'new-password'}
+          minLength={isLogin ? undefined : 8}
+          meter={!isLogin}
+        />
 
         {isLogin && (
           <div className="flex justify-end">
@@ -113,11 +106,7 @@ export function AuthForm({ mode, callbackError }: { mode: 'login' | 'signup'; ca
           </div>
         )}
 
-        {error && (
-          <p role="alert" className="rounded-xl bg-destructive/10 px-4 py-2.5 text-sm text-destructive">
-            {error}
-          </p>
-        )}
+        {error && <AuthError>{error}</AuthError>}
 
         <Button
           type="submit"
@@ -131,10 +120,13 @@ export function AuthForm({ mode, callbackError }: { mode: 'login' | 'signup'; ca
 
       <p className="mt-6 text-center text-sm text-fg-muted">
         {isLogin ? 'Nemáš účet?' : 'Už máš účet?'}{' '}
-        <Link href={isLogin ? '/registrace' : '/prihlaseni'} className="font-semibold text-navy-deep underline-offset-4 hover:underline">
+        <Link
+          href={isLogin ? '/registrace' : '/prihlaseni'}
+          className="font-semibold text-navy-deep underline-offset-4 hover:underline"
+        >
           {isLogin ? 'Zaregistruj se' : 'Přihlas se'}
         </Link>
       </p>
-    </div>
+    </AuthPanel>
   )
 }
