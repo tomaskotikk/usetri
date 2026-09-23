@@ -263,3 +263,70 @@ export function summarise(offers: Offer[]) {
     freeSeats: owned.reduce((sum, o) => sum + Math.max(0, o.seatsTotal - o.seatsTaken), 0),
   }
 }
+
+export interface PublicProfile {
+  id: string
+  name: string
+  avatar: string | null
+  joinedAt: string
+  /** Groups they run. */
+  owned: number
+  /** Groups they joined as a member. */
+  joined: number
+  freeSeats: number
+  /** Their open offers, so the profile is a place you can act from. */
+  offers: Offer[]
+}
+
+/**
+ * What one member may see about another.
+ *
+ * Counts only — never what they pay. The privacy notice promises other members
+ * see a name and a picture, and how much somebody spends on subscriptions is
+ * exactly the kind of thing a profile page should not leak.
+ */
+export async function getProfile(
+  supabase: Supabase,
+  viewerId: string,
+  id: string,
+): Promise<PublicProfile | null> {
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('id, full_name, avatar_url, created_at')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (!profile) return null
+
+  const [{ data: memberships }, roles] = await Promise.all([
+    supabase.from('group_members').select('group_id, role').eq('user_id', id),
+    myRoles(supabase, viewerId),
+  ])
+
+  const owned = (memberships ?? []).filter((m) => m.role === 'owner')
+  const joined = (memberships ?? []).filter((m) => m.role !== 'owner')
+
+  const { data } = await supabase
+    .from('groups')
+    .select(OFFER_SELECT)
+    .eq('owner_id', id)
+    .eq('closed', false)
+    .order('created_at', { ascending: false })
+    .returns<OfferRow[]>()
+
+  const offers = await attachMembers(
+    supabase,
+    (data ?? []).map((row) => toOffer(row, roles)).filter((o): o is Offer => o !== null),
+  )
+
+  return {
+    id: profile.id,
+    name: profile.full_name?.trim() || 'Anonymní člen',
+    avatar: profile.avatar_url ?? null,
+    joinedAt: profile.created_at,
+    owned: owned.length,
+    joined: joined.length,
+    freeSeats: offers.reduce((sum, o) => sum + Math.max(0, o.seatsTotal - o.seatsTaken), 0),
+    offers,
+  }
+}

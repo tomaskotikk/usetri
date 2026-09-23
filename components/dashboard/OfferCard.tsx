@@ -30,9 +30,15 @@ function MemberStack({ members, free }: { members: Offer['members']; free: numbe
     <div className="flex items-center">
       <div className="flex -space-x-2">
         {shown.map((m) => (
-          <span key={m.id} title={m.name} className="rounded-full ring-2 ring-card">
+          <Link
+            key={m.id}
+            href={`/dashboard/uzivatel/${m.id}`}
+            title={m.name}
+            aria-label={`Profil: ${m.name}`}
+            className="rounded-full ring-2 ring-card transition-transform hover:z-10 hover:-translate-y-0.5"
+          >
             <Avatar name={m.name} src={m.avatar} className="h-7 w-7" />
-          </span>
+          </Link>
         ))}
         {hidden > 0 && (
           <span className="grid h-7 w-7 place-items-center rounded-full bg-navy-deep text-[10px] font-bold text-white ring-2 ring-card">
@@ -122,7 +128,14 @@ export function OfferCard({ offer }: { offer: Offer }) {
             </span>
           </div>
           <p className="mt-2 truncate text-[12px] text-fg-muted">
-            Zakládá {offer.owner.name} · {formatSince(offer.createdAt)}
+            Zakládá{' '}
+            <Link
+              href={`/dashboard/uzivatel/${offer.owner.id}`}
+              className="font-medium text-navy-deep underline-offset-2 hover:underline"
+            >
+              {offer.owner.name}
+            </Link>{' '}
+            · {formatSince(offer.createdAt)}
           </p>
         </div>
 

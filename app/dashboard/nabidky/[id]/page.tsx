@@ -115,10 +115,17 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
         <ul className="mt-4 divide-y divide-border">
           {members.map((member) => (
             <li key={member.id} className="flex items-center gap-3 py-3">
-              <Avatar name={member.name} src={member.avatar} className="h-9 w-9" />
+              <Link href={`/dashboard/uzivatel/${member.userId}`} aria-label={`Profil: ${member.name}`}>
+                <Avatar name={member.name} src={member.avatar} className="h-9 w-9" />
+              </Link>
               <div className="min-w-0 flex-1">
                 <p className="flex items-center gap-1.5 truncate text-sm font-medium text-navy-deep">
-                  {member.name}
+                  <Link
+                    href={`/dashboard/uzivatel/${member.userId}`}
+                    className="underline-offset-2 hover:underline"
+                  >
+                    {member.name}
+                  </Link>
                   {member.userId === user.id && <span className="text-[11px] text-fg-muted">(ty)</span>}
                   {member.role === 'owner' && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-navy-deep px-2 py-0.5 text-[10px] font-semibold text-white">
