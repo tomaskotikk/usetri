@@ -13,7 +13,7 @@ import {
   type ActionState,
 } from '@/app/dashboard/actions'
 
-function useAction() {
+export function useAction() {
   const [pending, start] = useTransition()
   const router = useRouter()
 
