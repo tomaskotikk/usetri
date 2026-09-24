@@ -4,8 +4,9 @@ import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
+import { formatAccount, parseCzechAccount, toIban } from '@/lib/czech-account'
 
-export type ActionState = { error?: string } | null
+export type ActionState = { error?: string; ok?: boolean } | null
 
 async function client() {
   const supabase = createClient(await cookies())
@@ -34,6 +35,17 @@ export async function createOffer(_: ActionState, formData: FormData): Promise<A
   if (!Number.isInteger(pricePerSeat) || pricePerSeat < 1 || pricePerSeat > 5000)
     return { error: 'Cena za místo musí být mezi 1 a 5 000 Kč.' }
   if (note.length > 400) return { error: 'Poznámka může mít nejvýš 400 znaků.' }
+
+  const account = parseCzechAccount(String(formData.get('account') ?? ''))
+  if (!account) return { error: 'Tohle číslo účtu nevypadá správně. Zkontroluj ho prosím.' }
+
+  const { error: accountError } = await supabase.from('payout_accounts').upsert({
+    user_id: user.id,
+    iban: toIban(account),
+    account_display: formatAccount(account),
+    updated_at: new Date().toISOString(),
+  })
+  if (accountError) return { error: 'Číslo účtu se nepodařilo uložit. Zkus to prosím znovu.' }
 
   const { data, error } = await supabase
     .from('groups')
