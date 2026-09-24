@@ -1,0 +1,74 @@
+/*
+ * The puppet sizes itself from its own width: `--u` is one artboard unit, so every
+ * layer, joint and offset scales with the box it is put in — no JavaScript measuring.
+ */
+.puppet {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 380 / 432;
+  --u: calc(100cqw / 380);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  /* Fallbacks for browsers without linear(): close, but they start a touch abruptly. */
+  --spring-loose: cubic-bezier(0.45, 0, 0.25, 1.3);
+  --spring: cubic-bezier(0.45, 0, 0.25, 1.15);
+  --spring-firm: cubic-bezier(0.45, 0, 0.3, 1.04);
+}
+
+/*
+ * Joints move on springs, sampled into linear() easings: a spring let go from
+ * rest starts gently, overshoots a little and settles, so a pose change never
+ * jolts into motion. Loose for arms (about 8 % overshoot), plain for the head
+ * (4 %), firm for legs and the body (1 %).
+ */
+@supports (transition-timing-function: linear(0, 1)) {
+  .puppet {
+    --spring-loose: linear(0, 0.0324, 0.115, 0.2285, 0.357, 0.4886, 0.6141, 0.7277, 0.8257, 0.9066, 0.9702, 1.0176, 1.0504, 1.0708, 1.0811, 1.0835, 1.08, 1.0727, 1.0629, 1.0521, 1.0412, 1.0308, 1.0215, 1.0135, 1.0069, 1.0018, 0.9981, 0.9955, 0.9939, 0.9932, 0.993, 0.9934, 0.994, 0.9949, 0.9958, 0.9967, 0.9975, 0.9983, 0.999, 0.9995, 1);
+    --spring: linear(0, 0.0241, 0.0858, 0.1716, 0.2709, 0.3752, 0.4783, 0.5759, 0.6651, 0.7443, 0.8126, 0.87, 0.9171, 0.9545, 0.9834, 1.0049, 1.02, 1.0299, 1.0357, 1.0381, 1.0382, 1.0365, 1.0336, 1.03, 1.026, 1.022, 1.0181, 1.0145, 1.0113, 1.0085, 1.0061, 1.004, 1.0024, 1.0012, 1.0002, 0.9995, 0.999, 0.9987, 0.9986, 0.9985, 1);
+    --spring-firm: linear(0, 0.0186, 0.0664, 0.1335, 0.212, 0.2959, 0.3808, 0.4633, 0.5413, 0.6132, 0.6784, 0.7363, 0.7871, 0.8309, 0.8682, 0.8996, 0.9255, 0.9468, 0.9638, 0.9773, 0.9878, 0.9957, 1.0015, 1.0056, 1.0084, 1.01, 1.0109, 1.0111, 1.0109, 1.0103, 1.0096, 1.0087, 1.0078, 1.0068, 1.0059, 1.005, 1.0042, 1.0035, 1.0029, 1.0023, 1);
+  }
+}
+
+/* A layer covering the whole artboard — for parts drawn in artboard units. */
+.full {
+  position: absolute;
+  inset: 0;
+}
+
+/* A joint: a point that carries its limb and turns about itself. */
+.pt {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .puppet * {
+    transition: none !important;
+  }
+  .blink {
+    animation: none;
+  }
+}
+
+/* The standalone face (expression sheets) blinks on its own, cheaply. */
+.blink {
+  transform-box: view-box;
+  animation: blink 5.2s infinite;
+}
+@keyframes blink {
+  0%,
+  88%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  90% {
+    transform: scaleY(0.08);
+  }
+}
