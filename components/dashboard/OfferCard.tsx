@@ -27,7 +27,7 @@ function MemberStack({ members, free }: { members: Offer['members']; free: numbe
   const hidden = members.length - shown.length
 
   return (
-    <div className="flex items-center">
+    <div className="relative z-10 flex items-center">
       <div className="flex -space-x-2">
         {shown.map((m) => (
           <Link
@@ -84,7 +84,7 @@ export function OfferCard({ offer }: { offer: Offer }) {
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <Link
               href={`/dashboard/nabidky/${offer.id}`}
-              className="font-display text-lg font-bold tracking-[-0.02em] text-navy-deep decoration-brand decoration-2 underline-offset-4 hover:underline"
+              className="font-display text-lg font-bold tracking-[-0.02em] text-navy-deep decoration-brand decoration-2 underline-offset-4 after:absolute after:inset-0 after:rounded-3xl hover:underline"
             >
               {offer.service.name}
             </Link>
@@ -131,7 +131,7 @@ export function OfferCard({ offer }: { offer: Offer }) {
             Zakládá{' '}
             <Link
               href={`/dashboard/uzivatel/${offer.owner.id}`}
-              className="font-medium text-navy-deep underline-offset-2 hover:underline"
+              className="relative z-10 font-medium text-navy-deep underline-offset-2 hover:underline"
             >
               {offer.owner.name}
             </Link>{' '}
@@ -139,7 +139,8 @@ export function OfferCard({ offer }: { offer: Offer }) {
           </p>
         </div>
 
-        <div className="shrink-0">
+        {/* above the card-wide link, so these stay their own click targets */}
+        <div className="relative z-10 shrink-0">
           {offer.role === null && !full && !offer.closed && <JoinButton groupId={offer.id} />}
           {offer.role === 'member' && <LeaveButton groupId={offer.id} />}
           {offer.role === 'owner' && (

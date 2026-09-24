@@ -54,7 +54,7 @@ export function LeaveButton({ groupId, full = false }: { groupId: string; full?:
       variant="outline"
       disabled={pending}
       onClick={run(() => leaveOffer(groupId), 'Odešel jsi ze skupiny.', 'Opravdu chceš ze skupiny odejít?')}
-      className={`h-10 gap-2 rounded-xl bg-white px-4 ${full ? 'w-full' : ''}`}
+      className={`h-10 gap-2 rounded-xl bg-white px-4 text-navy-deep ${full ? 'w-full' : ''}`}
     >
       {pending ? spinner : <LogOut className="h-4 w-4" />} Odejít
     </Button>
@@ -71,7 +71,7 @@ export function ToggleClosedButton({ groupId, closed }: { groupId: string; close
         () => setOfferClosed(groupId, !closed),
         closed ? 'Nabídka je zase veřejná.' : 'Nabídka je uzavřená.',
       )}
-      className="h-10 gap-2 rounded-xl bg-white px-4"
+      className="h-10 gap-2 rounded-xl bg-white px-4 text-navy-deep"
     >
       {pending ? spinner : closed ? <LockOpen className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
       {closed ? 'Otevřít znovu' : 'Uzavřít nábor'}
