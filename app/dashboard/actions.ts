@@ -134,3 +134,18 @@ export async function removeMember(groupId: string, userId: string): Promise<Act
   refresh()
   return null
 }
+
+/** Same as the app's profile editor: the profile row, and the session's copy for greetings. */
+export async function updateProfileName(_: ActionState, formData: FormData): Promise<ActionState> {
+  const { supabase, user } = await client()
+  const name = String(formData.get('name') ?? '').trim()
+  if (!name) return { error: 'Jméno nemůže být prázdné.' }
+  if (name.length > 80) return { error: 'Jméno může mít nejvýš 80 znaků.' }
+
+  const { error } = await supabase.from('profiles').update({ full_name: name }).eq('id', user.id)
+  if (error) return { error: 'Jméno se nepodařilo uložit.' }
+  await supabase.auth.updateUser({ data: { full_name: name } })
+
+  refresh()
+  return { ok: true }
+}

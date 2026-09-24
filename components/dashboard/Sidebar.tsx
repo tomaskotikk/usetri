@@ -120,7 +120,8 @@ export function Sidebar({ user }: { user: DashboardUser }) {
  */
 export function MobileTopBar({ user }: { user: DashboardUser }) {
   const pathname = usePathname()
-  if (pathname === '/dashboard') return null
+  // Home and profile draw their own header, as the app's screens do.
+  if (pathname === '/dashboard' || pathname === '/dashboard/ucet') return null
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/95 md:bg-surface/85 md:backdrop-blur-xl lg:hidden">
