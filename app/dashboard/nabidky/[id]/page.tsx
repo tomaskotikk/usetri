@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, CalendarDays, Crown, Info, Lock, Users } from 'lucide-react'
+import { ArrowLeft, CalendarDays, Crown, Info, Landmark, Lock, Users } from 'lucide-react'
 import { ServiceIcon } from '@/components/illustrations/ServiceIcon'
 import { Avatar } from '@/components/dashboard/Sidebar'
 import { SeatMeter } from '@/components/dashboard/OfferCard'
@@ -12,7 +12,12 @@ import {
   RemoveMemberButton,
   ToggleClosedButton,
 } from '@/components/dashboard/OfferActions'
+import { PaymentCard } from '@/components/dashboard/PaymentCard'
+import { MemberPaymentControls } from '@/components/dashboard/PaymentActions'
+import { PaymentStatusBadge } from '@/components/dashboard/PaymentStatusBadge'
+import { PayoutAccountForm } from '@/components/dashboard/PayoutAccountForm'
 import { getMembers, getOffer, requireUser } from '@/lib/dashboard'
+import { getPaymentView } from '@/lib/payments'
 import { formatCzk, formatSince } from '@/lib/format'
 
 export const metadata: Metadata = { title: 'Nabídka — Ušetři' }
@@ -25,6 +30,8 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
   if (!offer) notFound()
 
   const members = await getMembers(supabase, offer.id)
+  const payments = await getPaymentView(supabase, user.id, offer)
+  const myName = members.find((m) => m.userId === user.id)?.name ?? ''
   const free = Math.max(0, offer.seatsTotal - offer.seatsTaken)
   const isOwner = offer.role === 'owner'
 
@@ -95,6 +102,32 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
         </div>
       </section>
 
+      {isOwner && !payments.account && (
+        <section className="rounded-3xl border-2 border-brand/40 bg-card p-5 sm:p-6">
+          <h2 className="flex items-center gap-2 font-display text-lg font-bold tracking-tight text-navy-deep">
+            <Landmark className="h-4 w-4 text-brand" /> Doplň číslo účtu, ať ti členové můžou platit
+          </h2>
+          <p className="mt-1 text-sm text-fg-muted">
+            Členům z něj vygenerujeme QR platbu. Uvidí ho jen lidé ve tvých skupinách.
+          </p>
+          <div className="mt-4 max-w-md">
+            <PayoutAccountForm />
+          </div>
+        </section>
+      )}
+
+      {payments.mine?.periods.map((view) => (
+        <PaymentCard
+          key={view.period}
+          groupId={offer.id}
+          serviceName={offer.service.name}
+          payerName={myName}
+          account={payments.account}
+          vs={payments.mine!.vs}
+          view={view}
+        />
+      ))}
+
       {offer.note && (
         <section className="rounded-3xl border border-border bg-card p-5 sm:p-6">
           <h2 className="text-[12px] font-semibold uppercase tracking-widest text-fg-muted">
@@ -135,6 +168,16 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
                 </p>
                 <p className="text-[11px] text-fg-muted">přidal se {formatSince(member.joinedAt)}</p>
               </div>
+              {isOwner && member.role === 'member' && payments.members.get(member.userId) && (
+                <div className="flex flex-wrap items-center justify-end gap-1.5">
+                  <PaymentStatusBadge status={payments.members.get(member.userId)!.status} />
+                  <MemberPaymentControls
+                    groupId={offer.id}
+                    userId={member.userId}
+                    view={payments.members.get(member.userId)!}
+                  />
+                </div>
+              )}
               {isOwner && member.role === 'member' && (
                 <RemoveMemberButton groupId={offer.id} userId={member.userId} name={member.name} />
               )}
@@ -154,8 +197,7 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
 
       <p className="flex items-start gap-2 rounded-2xl bg-muted px-4 py-3 text-[13px] text-fg-muted">
         <Info className="mt-0.5 h-4 w-4 shrink-0" />
-        Platby zatím nejsou napojené. Po přidání se domluvte se zakladatelem napřímo — v další verzi
-        to za vás vyřeší Ušetři.
+        Peníze posíláš napřímo zakladateli skupiny. Ušetři je nedrží — jen hlídá, co je zaplacené.
       </p>
     </div>
   )
