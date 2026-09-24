@@ -3,11 +3,12 @@ import { useActionState, useMemo, useState } from 'react'
 import { Check, Loader2, Search, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ServiceIcon } from '@/components/illustrations/ServiceIcon'
+import { AccountInput } from './AccountInput'
 import { createOffer, type ActionState } from '@/app/dashboard/actions'
 import { formatCzk } from '@/lib/format'
 import { categories, type Service } from '@/types/service'
 
-export function NewOfferForm({ services }: { services: Service[] }) {
+export function NewOfferForm({ services, payoutAccount }: { services: Service[]; payoutAccount?: string }) {
   const [state, action, pending] = useActionState<ActionState, FormData>(createOffer, null)
   const [selected, setSelected] = useState<Service | null>(null)
   const [query, setQuery] = useState('')
@@ -157,9 +158,16 @@ export function NewOfferForm({ services }: { services: Service[] }) {
             name="note"
             rows={3}
             maxLength={400}
-            placeholder="Platba přijde vždy k 1. dni v měsíci, pozvánku posílám hned…"
+            placeholder="Pozvánku do rodinného účtu posílám hned po první platbě…"
             className="w-full rounded-xl border border-border bg-white px-4 py-3 text-[15px] text-navy-deep outline-none transition placeholder:text-fg-muted/60 focus:border-brand focus:ring-4 focus:ring-brand/15"
           />
+        </Field>
+
+        <Field
+          label="Kam ti mají členové posílat peníze?"
+          hint="Z čísla účtu vygenerujeme členům QR platbu. Uvidí ho jen lidé ve tvé skupině."
+        >
+          <AccountInput defaultValue={payoutAccount} />
         </Field>
       </div>
 

@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
-import { BadgeCheck, Database, LogOut, Mail, ShieldCheck } from 'lucide-react'
+import { BadgeCheck, Database, Landmark, LogOut, Mail, ShieldCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar } from '@/components/dashboard/Sidebar'
 import { PageHeader } from '@/components/dashboard/PageHeader'
+import { PayoutAccountForm } from '@/components/dashboard/PayoutAccountForm'
 import { logout } from '@/app/auth/actions'
 import { getMyOffers, requireUser, summarise } from '@/lib/dashboard'
+import { getPayoutAccount } from '@/lib/payments'
 import { formatCzk } from '@/lib/format'
 
 export const metadata: Metadata = { title: 'Můj účet — Ušetři' }
@@ -12,9 +14,10 @@ export const metadata: Metadata = { title: 'Můj účet — Ušetři' }
 export default async function AccountPage() {
   const { supabase, user } = await requireUser()
 
-  const [{ data: profile }, offers] = await Promise.all([
+  const [{ data: profile }, offers, account] = await Promise.all([
     supabase.from('profiles').select('full_name, avatar_url, created_at').eq('id', user.id).maybeSingle(),
     getMyOffers(supabase, user.id),
+    getPayoutAccount(supabase, user.id),
   ])
 
   const stats = summarise(offers)
@@ -56,6 +59,18 @@ export default async function AccountPage() {
             </div>
           ))}
         </dl>
+      </section>
+
+      <section className="rounded-3xl border border-border bg-card p-6">
+        <h2 className="flex items-center gap-2 font-display text-lg font-bold tracking-tight text-navy-deep">
+          <Landmark className="h-4 w-4 text-brand" /> Výplatní účet
+        </h2>
+        <p className="mt-1 text-sm text-fg-muted">
+          Sem ti členové tvých skupin posílají peníze. Vidí ho jen lidé, kteří jsou v některé z tvých skupin.
+        </p>
+        <div className="mt-4 max-w-md">
+          <PayoutAccountForm current={account?.display} />
+        </div>
       </section>
 
       <section className="grid gap-3 sm:grid-cols-3">
