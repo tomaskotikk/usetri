@@ -49,9 +49,42 @@ export type Database = {
         Relationships: []
       }
       group_members: {
-        Row: { id: string; group_id: string; user_id: string; role: string; joined_at: string }
+        Row: {
+          id: string
+          group_id: string
+          user_id: string
+          role: string
+          joined_at: string
+          /** Set by the database on insert; clients cannot choose it. */
+          billing_start: string
+          /** Variable symbol for QR payments. Set by the database on insert. */
+          payment_ref: number
+        }
         Insert: { group_id: string; user_id: string; role?: string }
         Update: never
+        Relationships: []
+      }
+      payout_accounts: {
+        Row: { user_id: string; iban: string; account_display: string; updated_at: string }
+        Insert: { user_id: string; iban: string; account_display: string; updated_at?: string }
+        Update: { iban?: string; account_display?: string; updated_at?: string }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          id: string
+          group_id: string
+          user_id: string
+          period_start: string
+          amount: number
+          status: 'reported' | 'confirmed'
+          reported_at: string | null
+          confirmed_at: string | null
+          created_at: string
+        }
+        /** amount and timestamps are set by the database. */
+        Insert: { group_id: string; user_id: string; period_start: string; status: 'reported' | 'confirmed' }
+        Update: { status?: 'confirmed' }
         Relationships: []
       }
     }
@@ -66,3 +99,5 @@ export type ProfileRow = Database['public']['Tables']['profiles']['Row']
 export type ServiceRow = Database['public']['Tables']['services']['Row']
 export type GroupRow = Database['public']['Tables']['groups']['Row']
 export type MemberRow = Database['public']['Tables']['group_members']['Row']
+export type PayoutAccountRow = Database['public']['Tables']['payout_accounts']['Row']
+export type PaymentRow = Database['public']['Tables']['payments']['Row']
