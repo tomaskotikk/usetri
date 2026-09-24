@@ -66,7 +66,8 @@ export default async function AccountPage() {
           <Landmark className="h-4 w-4 text-brand" /> Výplatní účet
         </h2>
         <p className="mt-1 text-sm text-fg-muted">
-          Sem ti členové tvých skupin posílají peníze. Vidí ho jen lidé, kteří jsou v některé z tvých skupin.
+          Sem ti členové tvých skupin posílají peníze. Vidí ho každý, kdo se přidá do některé z tvých
+          skupin; ostatní uživatelé ho nevidí.
         </p>
         <div className="mt-4 max-w-md">
           <PayoutAccountForm current={account?.display} />

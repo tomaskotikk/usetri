@@ -75,7 +75,12 @@ export async function confirmPayment(paymentId: string): Promise<ActionState> {
 
 export async function rejectPayment(paymentId: string): Promise<ActionState> {
   const { supabase } = await requireUser()
-  const { data, error } = await supabase.from('payments').delete().eq('id', paymentId).select('id')
+  const { data, error } = await supabase
+    .from('payments')
+    .delete()
+    .eq('id', paymentId)
+    .eq('status', 'reported')
+    .select('id')
 
   if (error || !data?.length) return { error: 'Změna se nepovedla. Zkus to prosím znovu.' }
   refresh()

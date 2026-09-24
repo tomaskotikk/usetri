@@ -81,8 +81,12 @@ export async function PaymentCard({
           {rows.map((row) => (
             <div key={row.label} className="flex items-center gap-3 py-2">
               <dt className="w-16 shrink-0 text-[11px] uppercase tracking-widest text-fg-muted">{row.label}</dt>
-              <dd className="min-w-0 flex-1 truncate font-mono text-[13px] text-navy-deep">{row.shown}</dd>
-              <CopyButton value={row.copy} label={row.label} />
+              <dd className="flex min-w-0 flex-1 items-center gap-2 font-mono text-[13px] text-navy-deep">
+                <span className={`min-w-0 flex-1 ${row.label === 'Zpráva' ? 'break-words' : 'truncate'}`}>
+                  {row.shown}
+                </span>
+                <CopyButton value={row.copy} label={row.label} />
+              </dd>
             </div>
           ))}
         </dl>

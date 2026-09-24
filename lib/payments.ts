@@ -119,7 +119,7 @@ export async function getPaymentInbox(supabase: Supabase, userId: string) {
       .returns<(Paid & { group_id: string })[]>(),
     supabase
       .from('payments')
-      .select('id, group_id, period_start, amount, profiles(full_name), groups!inner(owner_id, services(*))')
+      .select('id, group_id, user_id, period_start, amount, profiles(full_name), groups!inner(owner_id, services(*))')
       .eq('status', 'reported')
       .eq('groups.owner_id', userId)
       .order('reported_at')
@@ -127,6 +127,7 @@ export async function getPaymentInbox(supabase: Supabase, userId: string) {
         {
           id: string
           group_id: string
+          user_id: string
           period_start: string
           amount: number
           profiles: { full_name: string | null } | null
@@ -143,8 +144,15 @@ export async function getPaymentInbox(supabase: Supabase, userId: string) {
     return [{ ...view, groupId: m.group_id, service: toService(m.groups.services) }]
   })
 
-  const toConfirm: InboxItem[] = (reported ?? []).flatMap((r) =>
-    r.groups?.services
+  const reportedList = reported ?? []
+  const reportedGroupIds = [...new Set(reportedList.map((r) => r.group_id))]
+  const { data: currentMembers } = reportedGroupIds.length
+    ? await supabase.from('group_members').select('group_id, user_id').in('group_id', reportedGroupIds)
+    : { data: [] as { group_id: string; user_id: string }[] }
+  const stillMember = new Set((currentMembers ?? []).map((m) => `${m.group_id}:${m.user_id}`))
+
+  const toConfirm: InboxItem[] = reportedList.flatMap((r) =>
+    r.groups?.services && stillMember.has(`${r.group_id}:${r.user_id}`)
       ? [
           {
             period: r.period_start,

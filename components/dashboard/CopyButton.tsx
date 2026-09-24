@@ -7,7 +7,7 @@ export function CopyButton({ value, label }: { value: string; label: string }) {
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(value)
-      toast.success(`${label} zkopírováno`)
+      toast.success(`Zkopírováno: ${label}`)
     } catch {
       toast.error('Kopírování se nepovedlo.')
     }

@@ -17,7 +17,7 @@ export function PayoutAccountForm({ current }: { current?: string }) {
 
   return (
     <form action={action} className="space-y-3">
-      <AccountInput defaultValue={current} />
+      <AccountInput defaultValue={current} key={current} />
       {state?.error && (
         <p role="alert" className="rounded-xl bg-destructive/10 px-4 py-2.5 text-sm text-destructive">
           {state.error}

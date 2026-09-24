@@ -78,8 +78,10 @@ export default function TermsPage() {
         </Callout>
         <P>
           Zakladatel skupiny může v Ušetři uvést číslo svého bankovního účtu. Ušetři z něj členům vytvoří
-          QR platbu a eviduje, kdo platbu nahlásil a kterou zakladatel potvrdil. Peníze posílá člen přímo
-          ze své banky zakladateli. Evidence v Ušetři slouží jen pro přehled členů a není dokladem o platbě.
+          QR platbu a eviduje, kdo platbu nahlásil a kterou zakladatel potvrdil. Zakladatel může platbu
+          označit jako zaplacenou i ručně, třeba když mu člen zaplatil v hotovosti. Peníze posílá člen
+          přímo ze své banky zakladateli. Evidence v Ušetři slouží jen pro přehled členů a není dokladem
+          o platbě.
         </P>
         <P>
           Ceny uvedené v katalogu a v kalkulačce jsou orientační a vycházejí z veřejných ceníků

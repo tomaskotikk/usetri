@@ -29,9 +29,12 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
   const offer = await getOffer(supabase, user.id, id)
   if (!offer) notFound()
 
-  const members = await getMembers(supabase, offer.id)
-  const payments = await getPaymentView(supabase, user.id, offer)
-  const myName = members.find((m) => m.userId === user.id)?.name ?? ''
+  const [members, payments] = await Promise.all([
+    getMembers(supabase, offer.id),
+    getPaymentView(supabase, user.id, offer),
+  ])
+  const me = members.find((m) => m.userId === user.id)
+  const myName = me && me.name !== 'Anonymní člen' ? me.name : ''
   const free = Math.max(0, offer.seatsTotal - offer.seatsTaken)
   const isOwner = offer.role === 'owner'
 
@@ -108,7 +111,8 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
             <Landmark className="h-4 w-4 text-brand" /> Doplň číslo účtu, ať ti členové můžou platit
           </h2>
           <p className="mt-1 text-sm text-fg-muted">
-            Členům z něj vygenerujeme QR platbu. Uvidí ho jen lidé ve tvých skupinách.
+            Členům z něj vygenerujeme QR platbu. Vidí ho každý, kdo se přidá do některé z tvých
+            skupin; ostatní ho nevidí.
           </p>
           <div className="mt-4 max-w-md">
             <PayoutAccountForm />
@@ -147,7 +151,7 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
 
         <ul className="mt-4 divide-y divide-border">
           {members.map((member) => (
-            <li key={member.id} className="flex items-center gap-3 py-3">
+            <li key={member.id} className="flex flex-wrap items-center gap-3 py-3">
               <Link href={`/dashboard/uzivatel/${member.userId}`} aria-label={`Profil: ${member.name}`}>
                 <Avatar name={member.name} src={member.avatar} className="h-9 w-9" />
               </Link>
@@ -168,8 +172,11 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
                 </p>
                 <p className="text-[11px] text-fg-muted">přidal se {formatSince(member.joinedAt)}</p>
               </div>
+              {isOwner && member.role === 'member' && (
+                <RemoveMemberButton groupId={offer.id} userId={member.userId} name={member.name} />
+              )}
               {isOwner && member.role === 'member' && payments.members.get(member.userId) && (
-                <div className="flex flex-wrap items-center justify-end gap-1.5">
+                <div className="flex basis-full flex-wrap items-center justify-start gap-1.5 pl-12 sm:basis-auto sm:justify-end sm:pl-0">
                   <PaymentStatusBadge status={payments.members.get(member.userId)!.status} />
                   <MemberPaymentControls
                     groupId={offer.id}
@@ -177,9 +184,6 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
                     view={payments.members.get(member.userId)!}
                   />
                 </div>
-              )}
-              {isOwner && member.role === 'member' && (
-                <RemoveMemberButton groupId={offer.id} userId={member.userId} name={member.name} />
               )}
             </li>
           ))}

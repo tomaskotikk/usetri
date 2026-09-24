@@ -165,7 +165,7 @@ export function NewOfferForm({ services, payoutAccount }: { services: Service[];
 
         <Field
           label="Kam ti mají členové posílat peníze?"
-          hint="Z čísla účtu vygenerujeme členům QR platbu. Uvidí ho jen lidé ve tvé skupině."
+          hint="Z čísla účtu vygenerujeme členům QR platbu. Vidí ho každý, kdo se přidá do tvé skupiny; ostatní ho nevidí."
         >
           <AccountInput defaultValue={payoutAccount} />
         </Field>

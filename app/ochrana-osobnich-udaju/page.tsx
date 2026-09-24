@@ -40,8 +40,8 @@ export default function PrivacyPage() {
             ceny za místo a data.
           </LI>
           <LI>
-            <strong>Číslo bankovního účtu zakladatele</strong> — pokud ho zadáš, vidí ho členové tvých
-            skupin, aby ti mohli poslat platbu. Nikdo jiný k němu přístup nemá.
+            <strong>Číslo bankovního účtu zakladatele</strong> — pokud ho zadáš, vidí ho každý, kdo se
+            přidá do některé z tvých skupin; ostatní uživatelé ho nevidí.
           </LI>
           <LI>
             <strong>Evidence plateb</strong> — za který měsíc člen platbu nahlásil, kdy ji zakladatel
@@ -122,11 +122,28 @@ export default function PrivacyPage() {
           Pokud si s nimi chceš vyměnit kontakt, aby ti mohli poslat pozvánku do tarifu, uděláš to sám
           a dobrovolně.
         </P>
+        <P>
+          Založíš-li skupinu a zadáš k ní <strong>číslo bankovního účtu</strong>, vidí ho každý, kdo se
+          přidá do některé z tvých skupin; ostatní uživatelé ho nevidí.
+        </P>
+        <UL>
+          <LI>
+            Zakladatel skupiny vidí, jestli a kdy jsi za daný měsíc zaplatil, a v jaké výši.
+          </LI>
+          <LI>
+            Přednastavená platební zpráva nese do bankovního výpisu zakladatele tvoje křestní jméno
+            a iniciálu příjmení.
+          </LI>
+        </UL>
       </Section>
 
       <Section n={6} title="Jak dlouho údaje držíme">
         <UL>
           <LI>Údaje účtu — po dobu jeho existence.</LI>
+          <LI>
+            Evidence plateb — po dobu trvání skupiny, i po odchodu člena. Smažeme ji spolu se skupinou
+            nebo s účtem.
+          </LI>
           <LI>Po zrušení účtu — smažeme je do 30 dnů.</LI>
           <LI>Záznamy o přihlášení — 12 měsíců.</LI>
           <LI>Co musíme uchovat ze zákona — po dobu, kterou zákon určí.</LI>
