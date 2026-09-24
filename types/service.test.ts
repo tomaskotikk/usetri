@@ -14,9 +14,11 @@ describe('service catalogue', () => {
     }
   })
 
-  it('covers every category with at least three services', () => {
+  // No empty categories. Not "at least three": only plans that can really be shared
+  // belong here, and games have just one (docs/research-predplatne.md).
+  it('leaves no category empty', () => {
     for (const c of categories) {
-      expect(services.filter((s) => s.category === c.id).length).toBeGreaterThanOrEqual(3)
+      expect(services.filter((s) => s.category === c.id).length).toBeGreaterThanOrEqual(1)
     }
   })
 

@@ -56,11 +56,6 @@ export const categories: CategoryMeta[] = [
     description: 'Nástroje pro tvorbu bývají nejdražší položkou. Týmové licence to řeší.',
   },
   {
-    id: 'ai',
-    label: 'AI nástroje',
-    description: 'Týmové plány u AI služeb vychází na osobu výrazně levněji než jednotlivé účty.',
-  },
-  {
     id: 'soukromi',
     label: 'Soukromí a bezpečnost',
     description: 'VPN a správci hesel počítají s víc zařízeními i členy rodiny.',
@@ -90,7 +85,6 @@ export const categories: CategoryMeta[] = [
 export const services: Service[] = [
   // ---------- video ----------
   { slug: 'netflix-premium', name: 'Netflix', plan: 'Premium (4K, 4 obrazovky)', category: 'video', color: '#e50914', fullPrice: 309, seats: 4, openGroups: 34, glyph: 'netflix' },
-  { slug: 'netflix-standard', name: 'Netflix', plan: 'Standard (2 obrazovky)', category: 'video', color: '#e50914', fullPrice: 229, seats: 2, openGroups: 18, glyph: 'netflix' },
   { slug: 'disney-plus', name: 'Disney+', plan: 'Standard (2 obrazovky)', category: 'video', color: '#0063e5', fullPrice: 189, seats: 4, openGroups: 27, glyph: 'disney' },
   { slug: 'hbo-max', name: 'HBO Max', plan: 'Standard', category: 'video', color: '#7b2bf9', fullPrice: 219, seats: 3, openGroups: 21 },
   { slug: 'apple-tv', name: 'Apple TV+', plan: 'Rodinné sdílení', category: 'video', color: '#111111', fullPrice: 199, seats: 6, openGroups: 16 },
@@ -109,11 +103,7 @@ export const services: Service[] = [
   { slug: 'tidal', name: 'Tidal', plan: 'Family', category: 'hudba', color: '#00ffff', fullPrice: 299, seats: 6, openGroups: 4 },
 
   // ---------- hry ----------
-  { slug: 'xbox-game-pass', name: 'Xbox Game Pass', plan: 'Ultimate', category: 'hry', color: '#107c10', fullPrice: 449, seats: 4, openGroups: 17 },
-  { slug: 'playstation-plus', name: 'PlayStation Plus', plan: 'Premium', category: 'hry', color: '#0070d1', fullPrice: 419, seats: 2, openGroups: 11 },
   { slug: 'nintendo-online', name: 'Nintendo Switch Online', plan: 'Family (8 členů)', category: 'hry', color: '#e60012', fullPrice: 149, seats: 8, openGroups: 13 },
-  { slug: 'ea-play', name: 'EA Play', plan: 'Pro', category: 'hry', color: '#ff4747', fullPrice: 349, seats: 3, openGroups: 5 },
-  { slug: 'ubisoft-plus', name: 'Ubisoft+', plan: 'Premium', category: 'hry', color: '#0a72ff', fullPrice: 399, seats: 3, openGroups: 3 },
 
   // ---------- software ----------
   { slug: 'adobe-cc', name: 'Adobe CC', plan: 'All Apps (Teams)', category: 'software', color: '#eb1000', fullPrice: 1450, seats: 4, openGroups: 15, glyph: 'adobe' },
@@ -122,12 +112,6 @@ export const services: Service[] = [
   { slug: 'canva-pro', name: 'Canva', plan: 'Teams (5 členů)', category: 'software', color: '#00c4cc', fullPrice: 379, seats: 5, openGroups: 12 },
   { slug: 'figma', name: 'Figma', plan: 'Professional', category: 'software', color: '#f24e1e', fullPrice: 349, seats: 3, openGroups: 6 },
   { slug: 'notion', name: 'Notion', plan: 'Plus (tým)', category: 'software', color: '#111111', fullPrice: 269, seats: 4, openGroups: 9 },
-
-  // ---------- ai ----------
-  { slug: 'chatgpt-team', name: 'ChatGPT', plan: 'Team', category: 'ai', color: '#10a37f', fullPrice: 690, seats: 2, openGroups: 20 },
-  { slug: 'midjourney', name: 'Midjourney', plan: 'Standard', category: 'ai', color: '#3b3b98', fullPrice: 699, seats: 4, openGroups: 7 },
-  { slug: 'perplexity', name: 'Perplexity', plan: 'Pro', category: 'ai', color: '#20808d', fullPrice: 499, seats: 3, openGroups: 6 },
-  { slug: 'elevenlabs', name: 'ElevenLabs', plan: 'Creator', category: 'ai', color: '#111111', fullPrice: 549, seats: 3, openGroups: 4 },
 
   // ---------- soukromi ----------
   { slug: 'nordvpn', name: 'NordVPN', plan: '6 zařízení', category: 'soukromi', color: '#4687ff', fullPrice: 199, seats: 6, openGroups: 28 },
