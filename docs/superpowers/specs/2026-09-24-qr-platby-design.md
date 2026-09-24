@@ -73,6 +73,11 @@ Nikdy nepřidávat účet do `profiles` — ty jsou čitelné všemi přihláše
   — stávající řádky dostanou datum nasazení (žádný zpětný dluh).
 - `payment_ref bigint not null unique default nextval('payment_ref_seq')`,
   sekvence začíná na `40000001` → slouží jako **VS** (8 číslic).
+- **Trigger `before insert`** (sloučit do stávajícího `guard_seat_capacity`) oba sloupce
+  **vždy přepíše** serverovými hodnotami — klient (mobil vkládá napřímo) si nesmí zvolit
+  vlastní `billing_start` ani VS.
+- `group_members` dál nemá žádnou UPDATE policy — sloupce po vložení nejdou změnit.
+- `payment_ref` je čitelný všemi přihlášenými (jako celá tabulka) — nízké riziko, vědomá volba.
 
 ### `payments` (nová)
 
@@ -93,9 +98,10 @@ Nikdy nepřidávat účet do `profiles` — ty jsou čitelné všemi přihláše
 **Trigger `before insert`:**
 - `amount := groups.price_per_seat` (klient částku neurčuje),
 - ověří, že `user_id` je v `group_members` té skupiny s `role = 'member'`,
-- ověří, že `period_start` je platná splatnost pro jeho `billing_start` a není v budoucnu
-  víc než 7 dní (SQL funkce `is_billing_date(billing_start, d)` se stejnou logikou jako
-  `lib/billing.ts` včetně konce měsíce),
+- ověří, že `period_start` je platná splatnost pro jeho `billing_start`
+  (`period_start >= billing_start`, SQL funkce `is_billing_date(billing_start, d)` se
+  stejnou logikou jako `lib/billing.ts` včetně konce měsíce) a že není víc než 7 dní po
+  dnešku, kde dnešek = `(now() at time zone 'Europe/Prague')::date` (ne UTC `current_date`),
 - nastaví `reported_at` / `confirmed_at` podle `status`.
 
 **Trigger `before update`:** povolen jen přechod `reported → confirmed`; nastaví
@@ -106,8 +112,12 @@ RLS:
 - insert: plátce se `status = 'reported'` a `user_id = auth.uid()`;
   **nebo** zakladatel skupiny se `status = 'confirmed'` (ruční „zaplaceno“, např. hotovost).
 - update: jen zakladatel skupiny.
-- delete: zakladatel skupiny („Nedorazilo“) **nebo** plátce, pokud `status = 'reported'`
+- delete: zakladatel skupiny („Nedorazilo“ u `reported`, ale záměrně i u `confirmed` jako
+  zpět vzaté „Označit jako zaplacené“) **nebo** plátce, pokud `status = 'reported'`
   („Vzít zpět“).
+
+IBAN zakladatele uvidí každý, kdo se přidá do otevřené skupiny — plyne z návrhu (bez účtu
+nejde zaplatit), vědomá volba.
 
 Mobil zapisuje do Supabase napřímo, takže **RLS + triggery jsou jediná bezpečnostní hranice**.
 
@@ -119,15 +129,19 @@ se zkopírují do `usetri-mobile/src/lib/` (hlavička: „kopie z webu, měnit o
 ### `lib/czech-account.ts`
 - `parseCzechAccount(input): { prefix, number, bank } | null` — přijme
   `123456789/0800`, `19-123456789/0800`, mezery okolo; ověří váhový kontrolní součet
-  (mod 11, váhy 6,3,7,9,10,5,8,4,2,1) pro předčíslí i číslo a že kód banky je 4 číslice.
+  (mod 11, váhy 6,3,7,9,10,5,8,4,2,1 na číslo **zleva doplněné nulami na 10 číslic**;
+  předčíslí se stejně doplní na 10, tj. efektivně váhy 10,5,8,4,2,1) a že kód banky je
+  4 číslice.
 - `toIban(parsed): string` — `CZkk` + kód banky + předčíslí (6) + číslo (10), mod 97.
 - `formatAccount(parsed): string` — normalizovaný tvar pro `account_display`.
 - Přijme i vložený IBAN (`CZ65 0800 …`) — ověří mod 97 a převede zpět na český tvar.
 
 ### `lib/billing.ts`
-- `dueDateFor(billingStart, monthOffset): Date`
-- `currentPeriod(billingStart, today): Date`
-- `upcomingPeriod(billingStart, today): Date | null` — vrací další splatnost, pokud je ≤ 7 dní.
+Všechna data jako řetězce `'YYYY-MM-DD'` (žádný JS `Date` — posun o den mezi UTC
+serverem, klientem a Postgres `date`). `todayInPrague()` vrací dnešek v `Europe/Prague`.
+- `dueDateFor(billingStart, monthOffset): string`
+- `currentPeriod(billingStart, today): string`
+- `upcomingPeriod(billingStart, today): string | null` — vrací další splatnost, pokud je ≤ 7 dní.
 - `periodStatus(period, payment | null, today): 'paid' | 'reported' | 'overdue' | 'due'`
 
 ### `lib/spd.ts`
@@ -143,7 +157,8 @@ se zkopírují do `usetri-mobile/src/lib/` (hlavička: „kopie z webu, měnit o
   „Číslo účtu“ (placeholder `123456789/0800`), okamžitá validace na klientu.
 - Pokud už `payout_accounts` existuje, předvyplní se a stačí potvrdit.
 - `createOffer` účet validuje znovu a udělá upsert do `payout_accounts` před vložením skupiny.
-- Povinné pro nové skupiny.
+- Povinné pro nové skupiny — vynucuje jen UI/server action, ne databáze (mobil vkládá
+  skupinu napřímo). Záměrně: případ „zakladatel bez účtu“ je stejně pokrytý níže.
 
 ### Účet (`/dashboard/ucet`)
 - Sekce **„Výplatní účet“** — zobrazení + úprava čísla účtu (server action `savePayoutAccount`).
@@ -164,7 +179,8 @@ se zkopírují do `usetri-mobile/src/lib/` (hlavička: „kopie z webu, měnit o
 - Zakladatel bez účtu: výrazná karta „Doplň číslo účtu, ať ti členové můžou platit“ s formulářem.
 
 ### Přehled (`/dashboard`)
-- Sekce **„K zaplacení“** — moje období `due` / `overdue` napříč skupinami (odkaz na detail).
+- Sekce **„K zaplacení“** — moje aktuální období `due` / `overdue` napříč skupinami
+  (odkaz na detail). Náhled dalšího období sem nepatří, je jen v detailu skupiny.
 - Sekce **„Čeká na potvrzení (n)“** — pro zakladatele, platby `reported` v jeho skupinách.
 - Obě se skryjí, když jsou prázdné.
 
@@ -196,6 +212,7 @@ Stejné chování, po dokončení webu:
 
 Pod tlačítko registrace věta: „Registrací potvrzuješ, že ti je alespoň 18 let a souhlasíš
 s podmínkami.“ (odkaz na `/podminky`). Stejná věta do `/podminky`. Nic se neukládá.
+Na přání uživatele; nesouvisí s platbami → vlastní commit.
 
 ## Chyby a okrajové případy
 
@@ -213,7 +230,8 @@ s podmínkami.“ (odkaz na `/podminky`). Stejná věta do `/podminky`. Nic se n
   `spd` (formát, diakritika, oříznutí, `*` ve jméně).
 - RLS: ručně přes `execute_sql` s `set local role authenticated` + `request.jwt.claims`
   — cizí uživatel nevidí `payout_accounts`, člen nemůže potvrdit vlastní platbu, nemůže
-  vložit jinou částku, nemůže nahlásit období 2 měsíce dopředu.
+  vložit jinou částku, nemůže nahlásit období 2 měsíce dopředu, nemůže si při vstupu
+  zvolit vlastní `billing_start` ani VS.
 - QR ověřit naskenováním reálnou bankovní appkou (George / ČSOB / KB) — ruční krok.
 
 ## Pořadí prací
