@@ -13,6 +13,7 @@ import {
   ToggleClosedButton,
 } from '@/components/dashboard/OfferActions'
 import { PaymentCard } from '@/components/dashboard/PaymentCard'
+import { ShareInviteButton } from '@/components/invite/ShareInviteButton'
 import { MemberPaymentControls } from '@/components/dashboard/PaymentActions'
 import { PaymentStatusBadge } from '@/components/dashboard/PaymentStatusBadge'
 import { PayoutAccountForm } from '@/components/dashboard/PayoutAccountForm'
@@ -93,6 +94,14 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
         </div>
 
         <div className="mt-7 flex flex-wrap items-center gap-2">
+          {offer.role !== null && free > 0 && !offer.closed && (
+            <ShareInviteButton
+              groupId={offer.id}
+              serviceName={offer.service.name}
+              pricePerSeat={offer.pricePerSeat}
+              fullPrice={offer.service.fullPrice}
+            />
+          )}
           {offer.role === null && free > 0 && !offer.closed && <JoinButton groupId={offer.id} />}
           {offer.role === 'member' && <LeaveButton groupId={offer.id} />}
           {isOwner && <ToggleClosedButton groupId={offer.id} closed={offer.closed} />}

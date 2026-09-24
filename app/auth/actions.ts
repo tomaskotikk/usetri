@@ -3,6 +3,7 @@
 import { cookies, headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
+import { safeNext } from '@/lib/invite'
 
 export type AuthState = { error?: string; notice?: string } | null
 
@@ -27,7 +28,7 @@ export async function login(_: AuthState, formData: FormData): Promise<AuthState
   const { error } = await supabase.auth.signInWithPassword({ email, password })
   if (error) return { error: readable(error.code) }
 
-  redirect('/dashboard')
+  redirect(safeNext(formData.get('next')))
 }
 
 export async function signup(_: AuthState, formData: FormData): Promise<AuthState> {
@@ -37,18 +38,23 @@ export async function signup(_: AuthState, formData: FormData): Promise<AuthStat
   if (!name || !email) return { error: 'Vyplň jméno a e-mail.' }
   if (password.length < 8) return { error: 'Heslo musí mít aspoň 8 znaků.' }
 
+  // An invite's page, so the confirmation link brings them back to it.
+  const next = safeNext(formData.get('next'))
   const origin = (await headers()).get('origin')
   const supabase = createClient(await cookies())
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { full_name: name }, emailRedirectTo: `${origin}/auth/callback` },
+    options: {
+      data: { full_name: name },
+      emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}`,
+    },
   })
   if (error) return { error: readable(error.code) }
 
   // With e-mail confirmation on, there is no session yet.
   if (!data.session) return { notice: `Poslali jsme ti potvrzovací odkaz na ${email}.` }
-  redirect('/dashboard')
+  redirect(next)
 }
 
 export async function logout() {

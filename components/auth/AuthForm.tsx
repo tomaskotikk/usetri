@@ -22,14 +22,25 @@ function GoogleIcon() {
   )
 }
 
-export function AuthForm({ mode, callbackError }: { mode: 'login' | 'signup'; callbackError?: boolean }) {
+export function AuthForm({
+  mode,
+  callbackError,
+  next,
+}: {
+  mode: 'login' | 'signup'
+  callbackError?: boolean
+  /** Where to land afterwards, e.g. the invite that sent them here. */
+  next?: string
+}) {
   const isLogin = mode === 'login'
   const [state, action, pending] = useActionState<AuthState, FormData>(isLogin ? login : signup, null)
 
   const signInWithGoogle = async () => {
     const { error } = await createClient().auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${location.origin}/auth/callback` },
+      options: {
+        redirectTo: `${location.origin}/auth/callback${next ? `?next=${encodeURIComponent(next)}` : ''}`,
+      },
     })
     if (error) toast.error('Přihlášení přes Google se nepovedlo.')
   }
@@ -66,6 +77,7 @@ export function AuthForm({ mode, callbackError }: { mode: 'login' | 'signup'; ca
       </div>
 
       <form action={action} className="space-y-3.5">
+        {next && <input type="hidden" name="next" value={next} />}
         {!isLogin && (
           <div className="relative">
             <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-fg-muted" />
@@ -131,7 +143,7 @@ export function AuthForm({ mode, callbackError }: { mode: 'login' | 'signup'; ca
       <p className="mt-6 text-center text-sm text-fg-muted">
         {isLogin ? 'Nemáš účet?' : 'Už máš účet?'}{' '}
         <Link
-          href={isLogin ? '/registrace' : '/prihlaseni'}
+          href={`${isLogin ? '/registrace' : '/prihlaseni'}${next ? `?next=${encodeURIComponent(next)}` : ''}`}
           className="font-semibold text-navy-deep underline-offset-4 hover:underline"
         >
           {isLogin ? 'Zaregistruj se' : 'Přihlas se'}

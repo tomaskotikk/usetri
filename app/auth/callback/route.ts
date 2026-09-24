@@ -2,16 +2,15 @@ import { cookies } from 'next/headers'
 import { NextResponse, after } from 'next/server'
 import { createClient } from '@/utils/supabase/server'
 import { sendWelcome } from '@/lib/email/send'
+import { safeNext } from '@/lib/invite'
 
 // Handles the link from the confirmation e-mail and the return from Google OAuth.
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
 
-  // Recovery links ask to land on /nove-heslo instead. Only same-site paths are
-  // honoured — a bare "//host" would be a protocol-relative URL off our domain.
-  const next = searchParams.get('next')
-  const target = next?.startsWith('/') && !next.startsWith('//') ? next : '/dashboard'
+  // Recovery links ask to land on /nove-heslo, invites on their /pozvanka page.
+  const target = safeNext(searchParams.get('next'))
 
   if (code) {
     const supabase = createClient(await cookies())

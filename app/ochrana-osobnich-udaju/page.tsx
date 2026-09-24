@@ -134,6 +134,11 @@ export default function PrivacyPage() {
             Přednastavená platební zpráva nese do bankovního výpisu zakladatele tvoje křestní jméno
             a iniciálu příjmení.
           </LI>
+          <LI>
+            Když někdo ze skupiny pošle <strong>odkaz na pozvánku</strong>, kdokoli s tímto odkazem uvidí
+            službu, cenu, počet volných míst a <strong>křestní jméno a profilový obrázek zakladatele</strong>
+            — i bez přihlášení. Seznam členů ani další údaje pozvánka neukazuje.
+          </LI>
         </UL>
       </Section>
 

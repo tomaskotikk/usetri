@@ -1,13 +1,15 @@
 import type { Metadata } from 'next'
 import { AuthShell } from '@/components/auth/AuthShell'
 import { AuthForm } from '@/components/auth/AuthForm'
+import { safeNext } from '@/lib/invite'
 
 export const metadata: Metadata = { title: 'Registrace — Ušetři' }
 
-export default function SignupPage() {
+export default async function SignupPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
+  const { next } = await searchParams
   return (
     <AuthShell>
-      <AuthForm mode="signup" />
+      <AuthForm mode="signup" next={next ? safeNext(next) : undefined} />
     </AuthShell>
   )
 }

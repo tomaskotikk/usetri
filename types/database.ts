@@ -89,7 +89,25 @@ export type Database = {
       }
     }
     Views: Record<never, never>
-    Functions: Record<never, never>
+    Functions: {
+      get_invite: {
+        Args: { p_group: string }
+        Returns: {
+          id: string
+          service_slug: string
+          service_name: string
+          service_plan: string
+          service_color: string
+          full_price: number
+          price_per_seat: number
+          seats_total: number
+          seats_taken: number
+          closed: boolean
+          owner_first_name: string | null
+          owner_avatar_url: string | null
+        }[]
+      }
+    }
     Enums: Record<never, never>
     CompositeTypes: Record<never, never>
   }
