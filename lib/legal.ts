@@ -18,7 +18,7 @@ export const OPERATOR = {
 /** Marks a value the operator still has to supply. */
 export const missing = (label: string) => `[DOPLNIT: ${label}]`
 
-export const LEGAL_UPDATED = '23. září 2026'
+export const LEGAL_UPDATED = '24. září 2026'
 
 /** Third parties that touch personal data, for the privacy notice. */
 export const PROCESSORS = [

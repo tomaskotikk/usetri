@@ -40,13 +40,22 @@ export default function PrivacyPage() {
             ceny za místo a data.
           </LI>
           <LI>
+            <strong>Číslo bankovního účtu zakladatele</strong> — pokud ho zadáš, vidí ho členové tvých
+            skupin, aby ti mohli poslat platbu. Nikdo jiný k němu přístup nemá.
+          </LI>
+          <LI>
+            <strong>Evidence plateb</strong> — za který měsíc člen platbu nahlásil, kdy ji zakladatel
+            potvrdil a v jaké výši. Vidí ji jen plátce a zakladatel skupiny.
+          </LI>
+          <LI>
             <strong>Technické údaje</strong> — IP adresa a záznamy o přihlášení. Slouží k zabezpečení účtu
             a k odhalení zneužití.
           </LI>
         </UL>
         <Callout>
-          <strong>Nezpracováváme platební údaje.</strong> Platby neprobíhají přes Ušetři, takže se k nám
-          čísla karet ani bankovních účtů vůbec nedostanou.
+          <strong>Peníze přes nás neprocházejí.</strong> Platby posíláš přímo ze své banky. Čísla karet ani
+          přihlašovací údaje do banky se k nám nikdy nedostanou — ukládáme jen číslo účtu, které zakladatel
+          sám zadá, aby mu členové mohli zaplatit.
         </Callout>
       </Section>
 

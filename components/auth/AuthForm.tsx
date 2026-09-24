@@ -116,6 +116,16 @@ export function AuthForm({ mode, callbackError }: { mode: 'login' | 'signup'; ca
           {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {isLogin ? 'Přihlásit se' : 'Vytvořit účet'}
         </Button>
+
+        {!isLogin && (
+          <p className="text-center text-[12px] text-fg-muted">
+            Registrací potvrzuješ, že ti je alespoň 18 let a souhlasíš s{' '}
+            <Link href="/podminky" className="underline underline-offset-2 hover:text-navy-deep">
+              podmínkami
+            </Link>
+            .
+          </p>
+        )}
       </form>
 
       <p className="mt-6 text-center text-sm text-fg-muted">
