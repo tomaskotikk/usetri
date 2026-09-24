@@ -39,7 +39,7 @@ export function Sidebar({ user }: { user: DashboardUser }) {
         className="absolute inset-0 -z-10"
         style={{ background: 'radial-gradient(130% 80% at 20% 0%, #10305c 0%, #071229 45%, #050b1a 100%)' }}
       />
-      <div className="absolute -left-24 top-16 -z-10 h-[320px] w-[320px] rounded-full bg-brand/15 blur-[120px]" />
+      <div className="absolute -left-24 top-16 -z-10 h-[320px] w-[320px] glow scale-150 [--glow:color-mix(in_srgb,var(--brand)_15%,transparent)]" />
       <div className="pointer-events-none absolute -bottom-28 -left-20 -z-10 h-[440px] w-[440px] opacity-40">
         <GlobeCanvas className="h-full w-full" />
       </div>
@@ -123,7 +123,7 @@ export function MobileTopBar({ user }: { user: DashboardUser }) {
   if (pathname === '/dashboard') return null
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-surface/85 backdrop-blur-xl lg:hidden">
+    <header className="sticky top-0 z-40 border-b border-border bg-surface/95 md:bg-surface/85 md:backdrop-blur-xl lg:hidden">
       <div className="flex items-center justify-between px-4 py-3">
         <Link
           href="/"

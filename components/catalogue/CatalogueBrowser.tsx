@@ -27,8 +27,8 @@ function ServiceCard({ service, index = 0 }: { service: Service; index?: number 
         className="surface-card group relative flex h-full flex-col rounded-2xl p-5 hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300"
       >
         <span
-          className="absolute inset-x-0 -top-16 h-24 blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-500"
-          style={{ background: service.color }}
+          className="glow absolute inset-x-0 -top-16 h-24 opacity-0 group-hover:opacity-30 transition-opacity duration-500"
+          style={{ ['--glow' as string]: service.color }}
         />
 
         <div className="relative flex items-start gap-3">
@@ -81,7 +81,7 @@ export function CatalogueBrowser() {
 
   return (
     <>
-      <div className="sticky top-[60px] z-30 bg-surface/90 backdrop-blur-xl border-b border-border">
+      <div className="sticky top-[60px] z-30 bg-surface/95 md:bg-surface/90 md:backdrop-blur-xl border-b border-border">
         <div className="mx-auto max-w-6xl px-4 py-4 flex flex-col lg:flex-row lg:items-center gap-4">
           <div className="relative lg:w-80 shrink-0">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-fg-muted" />

@@ -73,8 +73,8 @@ export function OfferCard({ offer }: { offer: Offer }) {
     >
       {/* a breath of the service's own colour, so a wall of cards isn't uniform */}
       <div
-        className="pointer-events-none absolute -right-16 -top-20 -z-10 h-48 w-48 rounded-full opacity-[0.07] blur-2xl transition-opacity duration-300 group-hover:opacity-[0.13]"
-        style={{ background: offer.service.color }}
+        className="glow absolute -right-16 -top-20 -z-10 h-48 w-48 scale-150 opacity-[0.07] transition-opacity duration-300 group-hover:opacity-[0.13]"
+        style={{ ['--glow' as string]: offer.service.color }}
       />
 
       <div className="flex items-start gap-4">

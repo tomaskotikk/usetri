@@ -177,7 +177,7 @@ export function NewOfferForm({ services, payoutAccount }: { services: Service[];
           className="absolute inset-0 -z-10"
           style={{ background: 'linear-gradient(135deg, #0d1b36 0%, #16294f 55%, #0b3a34 100%)' }}
         />
-        <div className="absolute -right-10 -top-12 -z-10 h-32 w-32 rounded-full bg-brand/25 blur-2xl" />
+        <div className="absolute -right-10 -top-12 -z-10 h-32 w-32 glow scale-150 [--glow:color-mix(in_srgb,var(--brand)_25%,transparent)]" />
         <p className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-white/55">
           <Sparkles className="h-3.5 w-3.5 text-brand" /> Co ti nabídka udělá
         </p>

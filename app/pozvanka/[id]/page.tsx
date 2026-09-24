@@ -58,8 +58,8 @@ export default async function InvitePage({ params }: { params: Promise<{ id: str
         style={{ background: 'radial-gradient(120% 90% at 50% 0%, #16294f 0%, #0b1730 45%, #050b1a 100%)' }}
       />
       <div
-        className="absolute left-1/2 top-24 -z-10 h-[420px] w-[420px] -translate-x-1/2 rounded-full blur-[120px]"
-        style={{ background: `color-mix(in srgb, ${color} 38%, transparent)` }}
+        className="glow absolute left-1/2 top-24 -z-10 h-[420px] w-[420px] -translate-x-1/2 scale-150"
+        style={{ ['--glow' as string]: `color-mix(in srgb, ${color} 38%, transparent)` }}
       />
       <div className="absolute inset-0 -z-10 grain" />
 

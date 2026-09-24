@@ -43,7 +43,7 @@ export function TrustSafety() {
         }}
       />
       <div className="absolute inset-0 -z-10 bg-grid-dark" />
-      <div className="absolute -right-24 top-1/4 h-[420px] w-[420px] rounded-full bg-brand/12 blur-[150px] -z-10" />
+      <div className="absolute -right-24 top-1/4 h-[420px] w-[420px] -z-10 glow scale-150 [--glow:color-mix(in_srgb,var(--brand)_12%,transparent)]" />
 
       <div className="mx-auto max-w-6xl grid lg:grid-cols-[1.05fr_1fr] gap-14 lg:gap-20 items-start">
         <div>

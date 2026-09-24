@@ -27,13 +27,16 @@ export function GlobeCanvas({ className = '' }: { className?: string }) {
     if (!ctx) return
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    // Phones: a sharper backing store than 1.5x is invisible at this opacity, and
+    // half the frame rate is invisible at this rotation speed. Both halve the work.
+    const coarse = window.matchMedia('(pointer: coarse)').matches
     let width = 0
     let height = 0
     let dpr = 1
 
     const resize = () => {
       const rect = wrap.getBoundingClientRect()
-      dpr = Math.min(window.devicePixelRatio || 1, 2)
+      dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2)
       width = rect.width
       height = rect.height
       canvas.width = Math.round(width * dpr)
@@ -68,12 +71,24 @@ export function GlobeCanvas({ className = '' }: { className?: string }) {
     canvas.addEventListener('pointerdown', onPointerDown)
     window.addEventListener('pointermove', onPointerMove)
     window.addEventListener('pointerup', onPointerUp)
+    // A vertical swipe hands the gesture to the page scroll, which cancels ours.
+    window.addEventListener('pointercancel', onPointerUp)
     canvas.style.cursor = 'grab'
 
     let raf = 0
     let last = performance.now()
+    let visible = false
+    let skip = false
 
     const frame = (now: number) => {
+      raf = 0
+      // Nothing to draw while scrolled away, in a hidden tab or display:none (the
+      // other breakpoint's copy): stop the loop until it becomes visible again.
+      if (!visible || document.hidden || width === 0) return
+      raf = requestAnimationFrame(frame)
+      skip = coarse && !skip
+      if (skip) return
+
       const dt = Math.min((now - last) / 1000, 0.05)
       last = now
 
@@ -93,18 +108,29 @@ export function GlobeCanvas({ className = '' }: { className?: string }) {
         rotation: rotationRef.current,
         pulse: (Math.sin(now / 700) + 1) / 2,
       })
-
-      raf = requestAnimationFrame(frame)
     }
 
-    raf = requestAnimationFrame(frame)
+    const start = () => {
+      if (raf || !visible || document.hidden) return
+      last = performance.now()
+      raf = requestAnimationFrame(frame)
+    }
+    const seen = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting
+      start()
+    })
+    seen.observe(wrap)
+    document.addEventListener('visibilitychange', start)
 
     return () => {
       cancelAnimationFrame(raf)
       observer.disconnect()
+      seen.disconnect()
+      document.removeEventListener('visibilitychange', start)
       canvas.removeEventListener('pointerdown', onPointerDown)
       window.removeEventListener('pointermove', onPointerMove)
       window.removeEventListener('pointerup', onPointerUp)
+      window.removeEventListener('pointercancel', onPointerUp)
     }
   }, [points])
 
@@ -112,7 +138,7 @@ export function GlobeCanvas({ className = '' }: { className?: string }) {
     <div ref={wrapRef} className={className}>
       <canvas
         ref={canvasRef}
-        className="w-full h-full touch-none select-none"
+        className="w-full h-full touch-pan-y select-none"
         aria-label="Interaktivní glóbus — tažením myší jím otočíš"
         role="img"
       />

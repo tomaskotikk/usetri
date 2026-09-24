@@ -55,8 +55,8 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
         />
         <div className="absolute inset-0 -z-10 grain" />
         <div
-          className="absolute -right-12 -top-16 -z-10 h-64 w-64 rounded-full blur-[90px]"
-          style={{ background: `color-mix(in srgb, ${offer.service.color} 45%, transparent)` }}
+          className="glow absolute -right-12 -top-16 -z-10 h-64 w-64 scale-150"
+          style={{ ['--glow' as string]: `color-mix(in srgb, ${offer.service.color} 45%, transparent)` }}
         />
 
         <div className="flex flex-wrap items-start gap-5">

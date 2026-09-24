@@ -25,7 +25,7 @@ export default function CataloguePage() {
           }}
         />
         <div className="absolute inset-0 -z-10 bg-grid-dark" />
-        <div className="absolute -left-20 top-0 h-[360px] w-[360px] rounded-full bg-brand/15 blur-[130px] -z-10" />
+        <div className="absolute -left-20 top-0 h-[360px] w-[360px] -z-10 glow scale-150 [--glow:color-mix(in_srgb,var(--brand)_15%,transparent)]" />
 
         <div className="mx-auto max-w-6xl">
           <p className="text-xs uppercase tracking-[0.2em] text-brand font-semibold mb-4">Katalog</p>

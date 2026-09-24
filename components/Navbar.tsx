@@ -25,7 +25,7 @@ export function Navbar() {
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        light ? 'bg-white/85 backdrop-blur-xl border-b border-border py-2' : 'bg-transparent py-4'
+        light ? 'bg-white/95 md:bg-white/85 md:backdrop-blur-xl border-b border-border py-2' : 'bg-transparent py-4'
       }`}
     >
       <div className="mx-auto max-w-6xl flex items-center justify-between px-4">

@@ -38,8 +38,8 @@ export async function PopularServices() {
               className="surface-card group relative flex flex-col rounded-2xl p-5 hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300"
             >
               <span
-                className="absolute inset-x-0 -top-16 h-24 blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-500"
-                style={{ background: service.color }}
+                className="glow absolute inset-x-0 -top-16 h-24 opacity-0 group-hover:opacity-30 transition-opacity duration-500"
+                style={{ ['--glow' as string]: service.color }}
               />
               <div className="relative flex items-start gap-3">
                 <ServiceIcon service={service} size="sm" />
@@ -75,7 +75,7 @@ export async function PopularServices() {
               background: 'radial-gradient(120% 140% at 80% 10%, #16294f 0%, #0b1730 60%, #050b1a 100%)',
             }}
           >
-            <div className="absolute -right-10 -bottom-12 h-40 w-40 rounded-full bg-brand/25 blur-3xl" />
+            <div className="absolute -right-10 -bottom-12 h-40 w-40 glow scale-150 [--glow:color-mix(in_srgb,var(--brand)_25%,transparent)]" />
             <p className="relative font-display font-bold text-xl leading-snug">
               Netflix, Apple, HBO, Duolingo, Proton, Strava…
             </p>

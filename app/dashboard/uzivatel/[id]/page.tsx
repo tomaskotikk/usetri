@@ -55,7 +55,7 @@ export default async function MemberProfilePage({ params }: { params: Promise<{ 
           style={{ background: 'radial-gradient(120% 120% at 80% 0%, #16294f 0%, #0b1730 45%, #050b1a 100%)' }}
         />
         <div className="absolute inset-0 -z-10 grain" />
-        <div className="absolute -right-12 -top-16 -z-10 h-64 w-64 rounded-full bg-brand/25 blur-[90px]" />
+        <div className="absolute -right-12 -top-16 -z-10 h-64 w-64 glow scale-150 [--glow:color-mix(in_srgb,var(--brand)_25%,transparent)]" />
 
         <div className="flex items-center gap-4">
           <Avatar name={profile.name} src={profile.avatar} className="h-16 w-16 ring-2 ring-white/15" />

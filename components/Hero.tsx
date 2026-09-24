@@ -25,11 +25,10 @@ const stack: Variants = {
 }
 
 const riseIn: Variants = {
-  hidden: { opacity: 0, y: 34, filter: 'blur(12px)' },
+  hidden: { opacity: 0, y: 34 },
   show: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: { duration: 1.3, ease: EASE },
   },
 }
@@ -164,14 +163,14 @@ export function Hero() {
         </motion.div>
 
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 64, scale: 0.9, filter: 'blur(14px)' }}
-          animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+          initial={reduceMotion ? false : { opacity: 0, y: 64, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 0.55, duration: 1.7, ease: EASE }}
           style={{ rotateX: phoneRotateX, rotateY: phoneRotateY }}
           className="relative z-10 justify-self-center lg:justify-self-end"
         >
           {/* halo so the phone separates from the globe behind it */}
-          <div className="absolute -inset-16 rounded-full bg-navy-deep/45 blur-3xl -z-10" />
+          <div className="absolute -inset-16 -z-10 glow scale-150 [--glow:color-mix(in_srgb,var(--navy-deep)_45%,transparent)]" />
           <div className="animate-float">
             <PhoneMockup />
           </div>
@@ -194,7 +193,7 @@ export function Hero() {
         initial={reduceMotion ? false : { opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.9, duration: 1.2, ease: EASE }}
-        className="absolute bottom-0 inset-x-0 border-t border-white/10 bg-white/[0.03] backdrop-blur-sm"
+        className="absolute bottom-0 inset-x-0 border-t border-white/10 bg-[#07112a]/80 md:bg-white/[0.03] md:backdrop-blur-sm"
       >
         <div className="mx-auto max-w-6xl px-4 py-5 flex items-center gap-6 md:gap-10">
           <span className="text-[11px] uppercase tracking-[0.2em] text-white/35 shrink-0 hidden sm:block">

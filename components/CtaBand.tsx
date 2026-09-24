@@ -23,8 +23,8 @@ export function CtaBand() {
         }}
       >
         <div className="absolute inset-0 bg-grid-dark" />
-        <div className="absolute -right-20 -top-24 h-[380px] w-[380px] rounded-full bg-brand/20 blur-[120px]" />
-        <div className="absolute -left-24 bottom-0 h-[300px] w-[300px] rounded-full bg-cyan-accent/15 blur-[110px]" />
+        <div className="absolute -right-20 -top-24 h-[380px] w-[380px] glow scale-150 [--glow:color-mix(in_srgb,var(--brand)_20%,transparent)]" />
+        <div className="absolute -left-24 bottom-0 h-[300px] w-[300px] glow scale-150 [--glow:color-mix(in_srgb,var(--cyan-accent)_15%,transparent)]" />
 
         <div className="relative grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
           <div>

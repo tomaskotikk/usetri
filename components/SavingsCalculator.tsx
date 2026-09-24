@@ -59,7 +59,7 @@ export function SavingsCalculator() {
               background: 'radial-gradient(120% 140% at 85% 10%, #10305c 0%, #071229 55%, #050b1a 100%)',
             }}
           >
-            <div className="absolute -right-10 -top-14 h-48 w-48 rounded-full bg-brand/25 blur-3xl" />
+            <div className="absolute -right-10 -top-14 h-48 w-48 glow scale-150 [--glow:color-mix(in_srgb,var(--brand)_25%,transparent)]" />
             <p className="relative text-xs uppercase tracking-[0.2em] text-white/50">Ušetříš ročně</p>
             <p className="relative font-mono font-bold text-5xl md:text-6xl mt-2 tracking-[-0.06em] text-shimmer">
               <AnimatedNumber value={annualSavings} suffix=" Kč" />

@@ -8,7 +8,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       <div className="relative flex flex-col bg-surface px-6 py-8 sm:px-12">
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 bg-grid-light" />
-          <div className="absolute -left-32 top-1/4 h-[380px] w-[380px] rounded-full bg-brand/10 blur-[120px]" />
+          <div className="absolute -left-32 top-1/4 h-[380px] w-[380px] glow scale-150 [--glow:color-mix(in_srgb,var(--brand)_10%,transparent)]" />
         </div>
         <div className="relative flex items-center justify-between">
           <Link href="/" className="font-display text-xl font-extrabold tracking-tight text-navy-deep">

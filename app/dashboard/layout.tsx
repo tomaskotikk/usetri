@@ -21,8 +21,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <div className="relative min-w-0 flex-1">
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 bg-grid-light" />
-          <div className="absolute -right-32 top-0 h-[420px] w-[420px] rounded-full bg-brand/10 blur-[130px]" />
-          <div className="absolute -left-24 top-[60%] h-[360px] w-[360px] rounded-full bg-cyan-accent/10 blur-[130px]" />
+          <div className="absolute -right-32 top-0 h-[420px] w-[420px] glow scale-150 [--glow:color-mix(in_srgb,var(--brand)_10%,transparent)]" />
+          <div className="absolute -left-24 top-[60%] h-[360px] w-[360px] glow scale-150 [--glow:color-mix(in_srgb,var(--cyan-accent)_10%,transparent)]" />
         </div>
 
         <MobileTopBar user={profile} />

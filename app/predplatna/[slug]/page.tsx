@@ -51,8 +51,8 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
         />
         <div className="absolute inset-0 -z-10 bg-grid-dark" />
         <div
-          className="absolute -right-24 -top-20 h-[420px] w-[420px] rounded-full blur-[140px] -z-10 opacity-30"
-          style={{ background: service.color }}
+          className="glow absolute -right-24 -top-20 h-[420px] w-[420px] scale-150 -z-10 opacity-30"
+          style={{ ['--glow' as string]: service.color }}
         />
 
         <div className="mx-auto max-w-6xl">

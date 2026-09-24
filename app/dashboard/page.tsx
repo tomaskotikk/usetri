@@ -64,7 +64,7 @@ export default async function DashboardPage() {
             className="absolute inset-0 -z-10"
             style={{ background: 'radial-gradient(120% 130% at 88% 0%, #16294f 0%, #0b1730 45%, #050b1a 100%)' }}
           />
-          <div className="absolute -right-10 -top-24 -z-10 h-72 w-72 rounded-full bg-brand/25 blur-[110px]" />
+          <div className="absolute -right-10 -top-24 -z-10 h-72 w-72 glow scale-150 [--glow:color-mix(in_srgb,var(--brand)_25%,transparent)]" />
           <div className="absolute inset-0 -z-10 grain" />
 
           <div className="flex flex-wrap items-center justify-between gap-8">
