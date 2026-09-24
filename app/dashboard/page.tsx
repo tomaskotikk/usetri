@@ -6,17 +6,20 @@ import { EmptyState } from '@/components/dashboard/EmptyState'
 import { Mascot } from '@/components/illustrations/Mascot'
 import { OfferCard } from '@/components/dashboard/OfferCard'
 import { PageHeader, SectionHeading } from '@/components/dashboard/PageHeader'
+import { PaymentInbox } from '@/components/dashboard/PaymentInbox'
 import { Reveal } from '@/components/dashboard/Reveal'
 import { avatarFromSession, getMyOffers, getOffers, requireUser, summarise } from '@/lib/dashboard'
+import { getPaymentInbox } from '@/lib/payments'
 import { formatCzk } from '@/lib/format'
 
 export const metadata: Metadata = { title: 'Přehled — Ušetři' }
 
 export default async function DashboardPage() {
   const { supabase, user } = await requireUser()
-  const [mine, fresh] = await Promise.all([
+  const [mine, fresh, inbox] = await Promise.all([
     getMyOffers(supabase, user.id),
     getOffers(supabase, user.id, { onlyOpen: true, limit: 12 }),
+    getPaymentInbox(supabase, user.id),
   ])
 
   const stats = summarise(mine)
@@ -52,6 +55,8 @@ export default async function DashboardPage() {
         }
         action={{ href: '/dashboard/nova', label: 'Nabídnout místo' }}
       />
+
+      <PaymentInbox toPay={inbox.toPay} toConfirm={inbox.toConfirm} />
 
       <Reveal className="hidden lg:block">
         <section className="relative isolate overflow-hidden rounded-3xl p-6 text-white sm:p-8">
