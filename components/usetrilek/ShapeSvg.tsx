@@ -1,75 +1,9 @@
 import { memo, useId, type CSSProperties, type ReactElement } from 'react'
-import { TONE } from './palette'
 import { VIEW } from './rig'
 import { isColour, type Box, type Gradient, type Paint, type Shape } from './shapes'
 
 /** Artboard units → CSS length, via the `--u` the puppet root defines. */
 export const u = (n: number) => `calc(var(--u) * ${+n.toFixed(3)})`
-
-/**
- * The figure-wide paints every part refers to by name. Rendered once per figure
- * in an invisible <svg>; the parts' own <svg>s point at them by id.
- */
-export function PaintDefs({ uid }: { uid: string }) {
-  return (
-    <svg width="0" height="0" aria-hidden="true" style={{ position: 'absolute', overflow: 'hidden' }}>
-      <defs>
-        {Object.entries(TONE).map(([name, t]) => (
-          <radialGradient key={name} id={`${uid}-${name}`} cx="0.36" cy="0.3" r="0.8" fx="0.3" fy="0.22">
-            <stop offset="0" stopColor={t.l} />
-            <stop offset="0.55" stopColor={t.m} />
-            <stop offset="1" stopColor={t.d} />
-          </radialGradient>
-        ))}
-        {/* A ball of clay: a soft hot spot, then the colour rolling away into shade. */}
-        {Object.entries(TONE).map(([name, t]) => (
-          <radialGradient key={`ball-${name}`} id={`${uid}-ball-${name}`} cx="0.4" cy="0.36" r="0.72" fx="0.34" fy="0.26">
-            <stop offset="0" stopColor={t.hi} />
-            <stop offset="0.3" stopColor={t.l} />
-            <stop offset="0.72" stopColor={t.m} />
-            <stop offset="1" stopColor={t.d} />
-          </radialGradient>
-        ))}
-        {/*
-          A limb seen as a cylinder: light near the middle, shade towards both edges.
-          Nearly symmetric on purpose — limbs turn, and a one-sided highlight would
-          swing round to the wrong side on a raised arm.
-        */}
-        {Object.entries(TONE).map(([name, t]) => (
-          <linearGradient key={`tube-${name}`} id={`${uid}-tube-${name}`} x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor={t.d} />
-            <stop offset="0.3" stopColor={t.l} />
-            <stop offset="0.52" stopColor={t.m} />
-            <stop offset="0.86" stopColor={t.d} />
-            <stop offset="1" stopColor={t.dd} />
-          </linearGradient>
-        ))}
-        <linearGradient id={`${uid}-tube-cuff`} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor={TONE.hood.dd} />
-          <stop offset="0.32" stopColor={TONE.hood.m} />
-          <stop offset="0.6" stopColor={TONE.hood.d} />
-          <stop offset="1" stopColor={TONE.hood.dd} />
-        </linearGradient>
-        <radialGradient id={`${uid}-ao`}>
-          <stop offset="0" stopColor="#1a0c05" stopOpacity="0.32" />
-          <stop offset="1" stopColor="#1a0c05" stopOpacity="0" />
-        </radialGradient>
-        <linearGradient id={`${uid}-neck`} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor={TONE.skin.m} />
-          <stop offset="1" stopColor={TONE.skin.dd} />
-        </linearGradient>
-        <linearGradient id={`${uid}-glass`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#e6fbff" stopOpacity="0.85" />
-          <stop offset="1" stopColor="#8fdcff" stopOpacity="0.35" />
-        </linearGradient>
-        <linearGradient id={`${uid}-hem`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor={TONE.hood.dd} stopOpacity="0" />
-          <stop offset="1" stopColor={TONE.hood.dd} stopOpacity="0.55" />
-        </linearGradient>
-      </defs>
-    </svg>
-  )
-}
 
 function GradientDef({ id, g }: { id: string; g: Gradient }) {
   const stops = g.stops.map(([offset, color, opacity], i) => (
@@ -150,7 +84,7 @@ export function Shapes({ shapes, uid, local }: { shapes: Shape[]; uid: string; l
   )
 }
 
-/** Offset that puts artboard coordinates onto a full-artboard layer, whose left edge is x = -40. */
+/** Offset that puts artboard coordinates onto a full-artboard layer, whose corner is VIEW's. */
 export const STAGE = [-VIEW.x, -VIEW.y] as const
 const NO_SHIFT = [0, 0] as const
 

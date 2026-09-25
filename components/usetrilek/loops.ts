@@ -10,6 +10,7 @@ export type Drift =
   | { kind: 'twinkle'; dur: number; delay?: number }
   | { kind: 'rise'; dur: number; delay?: number; dx?: number }
   | { kind: 'fall'; dur: number; delay?: number; dx?: number; spin?: number }
+  | { kind: 'drip'; dur: number; delay?: number }
 
 export function driftFrames(d: Drift): Keyframe[] {
   switch (d.kind) {
@@ -40,6 +41,15 @@ export function driftFrames(d: Drift): Keyframe[] {
         { transform: `translate(${(d.dx ?? 100) * 0.12}%, ${-150 + 1850 * 0.12}%) rotate(${(d.spin ?? 300) * 0.12}deg)`, opacity: 1, offset: 0.12 },
         { transform: `translate(${(d.dx ?? 100) * 0.8}%, ${-150 + 1850 * 0.8}%) rotate(${(d.spin ?? 300) * 0.8}deg)`, opacity: 1, offset: 0.8 },
         { transform: `translate(${d.dx ?? 100}%, 1700%) rotate(${d.spin ?? 300}deg)`, opacity: 0 },
+      ]
+    case 'drip':
+      // Swells out of the skin, clings for a moment, then slides off and is gone.
+      return [
+        { transform: 'translateY(0%) scale(0.2)', opacity: 0, easing: 'cubic-bezier(.3,.7,.4,1)' },
+        { transform: 'translateY(0%) scale(1.08)', opacity: 1, offset: 0.16, easing: 'ease-in-out' },
+        { transform: 'translateY(4%) scale(0.98, 1.04)', opacity: 1, offset: 0.46, easing: 'cubic-bezier(.5,0,.8,.4)' },
+        { transform: 'translateY(150%) scale(0.9, 1.12)', opacity: 1, offset: 0.82, easing: 'ease-in' },
+        { transform: 'translateY(190%) scale(0.7)', opacity: 0 },
       ]
   }
 }

@@ -4,12 +4,12 @@ import { Wordmark } from '@/components/brand/marks'
 import { Playground } from '@/components/usetrilek/Playground'
 import { Usetrilek, UsetrilekFace } from '@/components/usetrilek/Usetrilek'
 import { POSES } from '@/components/usetrilek/poses'
-import { TONE } from '@/components/usetrilek/palette'
+import { SWATCHES } from '@/components/usetrilek/palette'
 import type { Face } from '@/components/usetrilek/rig'
 
 export const metadata: Metadata = {
   title: 'Ušetřílek',
-  description: 'Maskot Ušetři — postava z plastelíny, její pózy, výrazy a použití v appce.',
+  description: 'Maskot Ušetři — zelená kulička z loga, její pózy, výrazy a použití v appce.',
   robots: { index: false, follow: false },
 }
 
@@ -26,35 +26,26 @@ const TINTS = [
 ]
 
 const FACES: { name: string; face: Face; turn?: number }[] = [
-  { name: 'Úsměv', face: { eyes: 'open', brows: 'neutral', mouth: 'smile' } },
-  { name: 'Nadšení', face: { eyes: 'happy', brows: 'raised', mouth: 'grin', blush: 1.5 } },
-  { name: 'Mrknutí', face: { eyes: 'wink', brows: 'raised', mouth: 'smirk' }, turn: 0.2 },
-  { name: 'Údiv', face: { eyes: 'wide', brows: 'raised', mouth: 'o' } },
-  { name: 'Přemýšlí', face: { eyes: 'open', brows: 'skeptic', mouth: 'flat', look: [0.7, -1] }, turn: 0.3 },
-  { name: 'Starost', face: { eyes: 'open', brows: 'worried', mouth: 'wobbly', look: [0, 0.4] } },
-  { name: 'Rozpaky', face: { eyes: 'open', brows: 'worried', mouth: 'teeth', look: [-0.6, -0.2] }, turn: -0.2 },
-  { name: 'Otrávený', face: { eyes: 'half', brows: 'neutral', mouth: 'flat', look: [0.8, 0] } },
-  { name: 'Legrace', face: { eyes: 'happy', brows: 'neutral', mouth: 'tongue' }, turn: -0.15 },
-  { name: 'Spokojenost', face: { eyes: 'closed', brows: 'neutral', mouth: 'smile', blush: 1.4 } },
+  { name: 'Úsměv', face: { eyes: 'open', mouth: 'smile' } },
+  { name: 'Nadšení', face: { eyes: 'happy', mouth: 'open', blush: 1.6 } },
+  { name: 'Mrknutí', face: { eyes: 'wink', mouth: 'grin' }, turn: 0.2 },
+  { name: 'Údiv', face: { eyes: 'wide', mouth: 'o' } },
+  { name: 'Přemýšlí', face: { eyes: 'open', mouth: 'smirk', look: [0.7, -1] }, turn: 0.3 },
+  { name: 'Starost', face: { eyes: 'open', mouth: 'wobbly', look: [0, 0.6] } },
+  { name: 'Rozpaky', face: { eyes: 'open', mouth: 'teeth', look: [-0.7, -0.3], blush: 1.6 }, turn: -0.2 },
+  { name: 'Otrávený', face: { eyes: 'half', mouth: 'flat', look: [0.8, 0] } },
+  { name: 'Legrace', face: { eyes: 'happy', mouth: 'tongue' }, turn: -0.15 },
+  { name: 'Spokojenost', face: { eyes: 'closed', mouth: 'smile', blush: 1.5 } },
 ]
 
-/** Points on the idle figure, as a share of its box (viewBox -40 0 380 432). */
+/** Points on the idle figure, as a share of its box (VIEW: -60 40 420 392). */
 const DETAILS = [
-  { x: 50, y: 12, title: 'Kudrny z plastelíny', text: 'Každá kudrna je vlastní kulička se světlem — z dálky účes, zblízka hmota.' },
-  { x: 40, y: 41, title: 'Sluchátka kolem krku', text: 'Kluk, co sdílí Spotify. Tmavé mušle z boku, ať čtou jako sluchátka, ne jako oči.' },
-  { x: 58, y: 46.5, title: 'Jiskřička na hrudi', text: 'Po původním Ušetříkovi — ta modrá hvězdička, co mu blikala nad hlavou.' },
-  { x: 50, y: 58, title: 'Mikina v barvě značky', text: '#00D99A, klokaní kapsa, šňůrky a žebrovaný lem. Ušetři má na sobě.' },
-  { x: 25, y: 66, title: 'Velké ruce', text: 'O kousek větší, než by měly být — gesto musí být čitelné i v ikoně 40 px.' },
-  { x: 36, y: 94, title: 'Tenisky s mintovou podrážkou', text: 'Bílé, s tkaničkami a zeleným švihem. Stojí pevně na zemi.' },
-]
-
-const SWATCHES: { name: string; tone: keyof typeof TONE }[] = [
-  { name: 'Pleť', tone: 'skin' },
-  { name: 'Vlasy', tone: 'hair' },
-  { name: 'Mikina', tone: 'hood' },
-  { name: 'Kalhoty', tone: 'pants' },
-  { name: 'Mince', tone: 'gold' },
-  { name: 'Sluchátka', tone: 'navy' },
+  { x: 82.5, y: 29, title: 'Jiskřička', text: 'Modrá hvězdička, co ho všude doprovází. Bliká a pomalu se otáčí, každá jiným tempem.' },
+  { x: 50, y: 43, title: 'Odlesk', text: 'Světlejší ovál nahoře dělá z kolečka kuličku. Žádné přechody, jen dvě plochy barvy — jako logo.' },
+  { x: 39, y: 55, title: 'Oči s jiskrou', text: 'Velké tmavé oči s bílou tečkou. Mrká sám od sebe a občas dvakrát rychle za sebou.' },
+  { x: 29, y: 64.5, title: 'Tvářičky', text: 'Jemný stín pod očima. Když má radost, přitlačí.' },
+  { x: 16, y: 71, title: 'Ruce jako nudle', text: 'Kulaté konce bez prstů, přesně jako na webu. Ohýbají se v lokti a při šťouchnutí se natáhnou.' },
+  { x: 62.5, y: 89.5, title: 'Nožičky', text: 'Dva ovály pod tělem. Tělo na nich pruží, a když dopadne, rozplácne se.' },
 ]
 
 function Section({ eyebrow, title, lead, children }: { eyebrow: string; title: string; lead?: string; children: React.ReactNode }) {
@@ -93,7 +84,7 @@ export default function UsetrilekPage() {
         <Link href="/" aria-label="Ušetři — domů">
           <Wordmark size={24} />
         </Link>
-        <span className="rounded-full bg-white px-3 py-1 text-[12px] font-semibold text-fg-muted shadow-sm">Maskot · verze 2</span>
+        <span className="rounded-full bg-white px-3 py-1 text-[12px] font-semibold text-fg-muted shadow-sm">Maskot · animovaný</span>
       </header>
 
       {/* hero */}
@@ -104,8 +95,8 @@ export default function UsetrilekPage() {
             Ušetřílek
           </h1>
           <p className="mt-5 max-w-[440px] text-[17px] leading-relaxed text-fg-muted">
-            Kluk od vedle, co ví, kolik stojí Netflix na osobu. Z plastelíny, v mintové mikině, se sluchátky kolem krku — protože
-            Spotify se přece sdílí.
+            Zelená kulička z loga Ušetři. Úplně stejný jako na webu, jen teď umí všechno: pruží, skáče, mává, poklepává nohou a
+            mrká, když se na něj nikdo nedívá.
           </p>
           <dl className="mt-8 grid max-w-[420px] grid-cols-3 gap-3">
             {[
@@ -121,8 +112,8 @@ export default function UsetrilekPage() {
             ))}
           </dl>
           <p className="mt-4 max-w-[420px] text-[13px] leading-relaxed text-fg-muted">
-            Žádné obrázky — je poskládaný z kódu. Kostra, klouby a výrazy jsou data, takže stejná postava poběží na webu i v
-            mobilní appce. Klikni na něj.
+            Žádné obrázky — je poskládaný z kódu. Pózy a výrazy jsou data, takže stejný Ušetřílek poběží na webu i v mobilní
+            appce. Klikni na něj.
           </p>
         </div>
         <Playground />
@@ -161,10 +152,10 @@ export default function UsetrilekPage() {
         <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
           <p className="text-[12px] font-bold uppercase tracking-[0.18em] text-brand">Výrazy</p>
           <h2 className="mt-2 font-display text-[clamp(1.9rem,4vw,2.9rem)] font-extrabold leading-[1.05] tracking-[-0.03em] text-white">
-            Oči, obočí, pusa
+            Oči a pusa
           </h2>
           <p className="mt-3 max-w-[620px] text-[16px] leading-relaxed text-white/60">
-            Tři díly, které se skládají nezávisle na póze — a mrká sám od sebe.
+            Skládají se nezávisle na póze, jako na webu. Mrká a rozhlíží se sám od sebe.
           </p>
           <div className="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
             {FACES.map(({ name, face, turn }) => (
@@ -178,7 +169,7 @@ export default function UsetrilekPage() {
       </section>
 
       {/* details */}
-      <Section eyebrow="Detaily" title="Zblízka" lead="Postava je z pár jednoduchých tvarů. Charakter dělají drobnosti.">
+      <Section eyebrow="Detaily" title="Zblízka" lead="Kulička, dvě ruce, dvě nožičky. Charakter dělají drobnosti.">
         <div className="grid items-center gap-8 lg:grid-cols-[1fr_1.1fr]">
           <div className="rounded-[32px] bg-[radial-gradient(120%_100%_at_50%_0%,#f4fffb_0%,#cdf7e7_60%,#a9efd4_100%)] px-6 pt-8">
           <div className="relative mx-auto w-full max-w-[380px]">
@@ -211,19 +202,13 @@ export default function UsetrilekPage() {
         </div>
 
         <div className="mt-10 grid grid-cols-3 gap-3 sm:grid-cols-6">
-          {SWATCHES.map(({ name, tone }) => {
-            const t = TONE[tone]
-            return (
-              <div key={name} className="rounded-[22px] border border-border bg-white p-3">
-                <div
-                  className="aspect-square w-full rounded-full"
-                  style={{ background: `radial-gradient(circle at 34% 28%, ${t.hi} 0%, ${t.l} 22%, ${t.m} 58%, ${t.d} 100%)` }}
-                />
-                <p className="mt-2.5 text-[13px] font-bold text-navy-deep">{name}</p>
-                <p className="font-mono text-[11px] uppercase text-fg-muted">{t.m}</p>
-              </div>
-            )
-          })}
+          {SWATCHES.map(({ name, hex }) => (
+            <div key={name} className="rounded-[22px] border border-border bg-white p-3">
+              <div className="aspect-square w-full rounded-full" style={{ background: hex }} />
+              <p className="mt-2.5 text-[13px] font-bold text-navy-deep">{name}</p>
+              <p className="font-mono text-[11px] uppercase text-fg-muted">{hex}</p>
+            </div>
+          ))}
         </div>
       </Section>
 
@@ -272,7 +257,7 @@ export default function UsetrilekPage() {
                   Tomáš.
                 </p>
                 <p className="mt-1 text-[12.5px] text-white/60">Jsi ve 3 skupinách.</p>
-                <div className="absolute -bottom-[92px] right-[-26px]">
+                <div className="absolute -bottom-[40px] right-[-26px]">
                   <Usetrilek pose={byId.ahoj.pose} motion={byId.ahoj.motion} size={200} shadow={false} />
                 </div>
               </div>
@@ -296,15 +281,15 @@ export default function UsetrilekPage() {
       <Section
         eyebrow="Pod kapotou"
         title="Postava jako data"
-        lead="Žádné PNG ani Lottie. SVG složené z kódu, stínování jen přechody (žádné blur filtry, co by na telefonu sekaly), pohyb v CSS a animace se zastaví, když zmizí z obrazovky."
+        lead="Žádné PNG ani Lottie. Stejné tvary jako maskot na webu, jen rozložené do vrstev: každá část těla se hýbe sama, pohyb běží na grafické kartě a mimo obrazovku se zastaví."
       >
         <div className="grid gap-4 lg:grid-cols-2">
           <pre className="self-start overflow-x-auto rounded-[24px] bg-navy-deep p-6 font-mono text-[13px] leading-relaxed text-[#bdf5df]">
             {`<Usetrilek
   pose={{
-    armR: { upper: -30, fore: -84, hand: 'open' },
-    armL: { upper: 101, fore: 97, hand: 'relaxed' },
-    face: { eyes: 'open', brows: 'raised', mouth: 'grin' },
+    armR: { upper: -45, fore: -84 },
+    armL: { upper: 140, fore: 68 },
+    face: { eyes: 'open', mouth: 'grin' },
     …
   }}
   motion="wave"
@@ -312,10 +297,10 @@ export default function UsetrilekPage() {
           </pre>
           <ul className="grid gap-3">
             {[
-              ['Kostra', 'Ramena, lokty, zápěstí, kyčle, kolena. Póza = úhly kloubů, takže mezi pózami umí plynule přejít.'],
-              ['Výraz', '6 druhů očí, 5 obočí, 9 pus. Mrkání a pohled do strany zvládne sám.'],
-              ['Web i mobil', 'Jen tvary a přechody, které umí i react-native-svg — v Expo appce poběží ta samá postava.'],
-              ['Výkon', 'Smyčky běží v CSS, ne v JavaScriptu, a mimo obrazovku se pauznou.'],
+              ['Kostra', 'Ramena, lokty a dvě nožičky. Póza = úhly kloubů, takže mezi pózami přechází plynule, na pružině.'],
+              ['Želé', 'Při nádechu se nafoukne, při dopadu rozplácne a pak dozní. Objem drží, takže působí jako hmota, ne jako obrázek.'],
+              ['Výraz', '6 druhů očí, 9 pus, pohled kamkoli. Mrká a rozhlíží se sám — oči jdou vždycky o chlup dřív než hlava.'],
+              ['Web i mobil', 'Jen tvary, které umí i react-native-svg, takže v Expo appce poběží ten samý Ušetřílek.'],
             ].map(([title, text]) => (
               <li key={title} className="rounded-[22px] border border-border bg-white p-5">
                 <p className="font-display text-[17px] font-extrabold text-navy-deep">{title}</p>

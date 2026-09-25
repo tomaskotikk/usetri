@@ -1,12 +1,13 @@
 /*
  * The puppet sizes itself from its own width: `--u` is one artboard unit, so every
  * layer, joint and offset scales with the box it is put in — no JavaScript measuring.
+ * 420 × 392 is VIEW in rig.ts.
  */
 .puppet {
   position: relative;
   container-type: inline-size;
-  aspect-ratio: 380 / 432;
-  --u: calc(100cqw / 380);
+  aspect-ratio: 420 / 392;
+  --u: calc(100cqw / 420);
   -webkit-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -20,8 +21,8 @@
 /*
  * Joints move on springs, sampled into linear() easings: a spring let go from
  * rest starts gently, overshoots a little and settles, so a pose change never
- * jolts into motion. Loose for arms (about 8 % overshoot), plain for the head
- * (4 %), firm for legs and the body (1 %).
+ * jolts into motion. Loose for arms (about 8 % overshoot), plain for the face
+ * (4 %), firm for feet and the body (1 %).
  */
 @supports (transition-timing-function: linear(0, 1)) {
   .puppet {
@@ -69,6 +70,6 @@
     transform: scaleY(1);
   }
   90% {
-    transform: scaleY(0.08);
+    transform: scaleY(0.07);
   }
 }

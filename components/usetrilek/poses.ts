@@ -1,6 +1,6 @@
 import type { Extra } from './extras'
 import type { MOTIONS } from './motion'
-import type { Arm, Leg, Pose } from './rig'
+import type { Arm, Pose } from './rig'
 
 /**
  * The pose library. Each entry is where he stands, what he feels, how he moves
@@ -15,15 +15,15 @@ export type PoseDef = {
   /** How he moves while holding it — a key of MOTIONS. */
   motion: keyof typeof MOTIONS
   extras?: Extra[]
-  /** Sits on a block of Netflix instead of standing on the ground. */
+  /** Sits on a pile of subscriptions instead of standing on the ground. */
   seat?: boolean
 }
 
-const hangL: Arm = { upper: 101, fore: 97, hand: 'relaxed' }
-const hangR: Arm = { upper: 79, fore: 83, hand: 'relaxed', flip: true }
-const hipL: Arm = { upper: 142, fore: 38, hand: 'fist', flip: true }
-const standL: Leg = { thigh: 91, shin: 91, toe: 5 }
-const standR: Leg = { thigh: 89, shin: 89, toe: -5 }
+/** Arms hanging the way the web mascot's do: out from behind the ball, curling back in. */
+const hangL: Arm = { upper: 140, fore: 68 }
+const hangR: Arm = { upper: 40, fore: 112 }
+/** Elbow out a little further than hanging, as if about to plant a fist on his side. */
+const hipL: Arm = { upper: 154, fore: 76 }
 
 export const POSES: PoseDef[] = [
   {
@@ -32,12 +32,11 @@ export const POSES: PoseDef[] = [
     name: 'Ahoj!',
     use: 'Vítání, onboarding, hlavička domovské obrazovky',
     pose: {
-      tilt: -5,
+      lean: -2,
+      tilt: -4,
       armL: hangL,
-      armR: { upper: -30, fore: -84, hand: 'open' },
-      legL: standL,
-      legR: standR,
-      face: { eyes: 'open', brows: 'raised', mouth: 'grin' },
+      armR: { upper: -45, fore: -84 },
+      face: { eyes: 'open', mouth: 'grin' },
     },
   },
   {
@@ -48,9 +47,7 @@ export const POSES: PoseDef[] = [
     pose: {
       armL: hangL,
       armR: hangR,
-      legL: standL,
-      legR: standR,
-      face: { eyes: 'open', brows: 'neutral', mouth: 'smile' },
+      face: { eyes: 'open', mouth: 'smile' },
     },
   },
   {
@@ -59,13 +56,12 @@ export const POSES: PoseDef[] = [
     name: 'Přemýšlí',
     use: 'Výběr služby, prázdný stav „ještě nemáš skupinu“',
     pose: {
-      tilt: -6,
+      tilt: -5,
       turn: 0.25,
-      armL: { upper: 100, fore: -4, hand: 'flat', flip: true },
-      armR: { upper: 124, fore: -94, hand: 'fist', twist: 4 },
-      legL: standL,
-      legR: standR,
-      face: { eyes: 'open', brows: 'skeptic', mouth: 'smirk', look: [0.6, -0.9] },
+      armL: hangL,
+      armR: { upper: 100, fore: 160, front: true },
+      face: { eyes: 'open', mouth: 'smirk', look: [0.6, -0.9] },
+      noSparkle: true,
     },
     extras: ['thought'],
   },
@@ -75,11 +71,10 @@ export const POSES: PoseDef[] = [
     name: 'Hurá!',
     use: 'Platba potvrzená, skupina je plná',
     pose: {
-      armL: { upper: -128, fore: -112, hand: 'fist', flip: true },
-      armR: { upper: -52, fore: -68, hand: 'fist' },
-      legL: { thigh: 100, shin: 84, toe: 8 },
-      legR: { thigh: 80, shin: 96, toe: -8 },
-      face: { eyes: 'happy', brows: 'raised', mouth: 'grin', blush: 1.5 },
+      armL: { upper: -118, fore: -98 },
+      armR: { upper: -62, fore: -82 },
+      face: { eyes: 'happy', mouth: 'open', blush: 1.5 },
+      noSparkle: true,
     },
     extras: ['confetti'],
   },
@@ -89,13 +84,12 @@ export const POSES: PoseDef[] = [
     name: 'Ukazuje',
     use: 'Nápověda a tipy — „tady klikni“',
     pose: {
-      tilt: 4,
+      x: -18,
+      lean: 3,
       turn: 0.45,
       armL: hipL,
-      armR: { upper: -8, fore: -20, hand: 'point' },
-      legL: standL,
-      legR: standR,
-      face: { eyes: 'open', brows: 'raised', mouth: 'smile', look: [1, -0.2] },
+      armR: { upper: -12, fore: -20 },
+      face: { eyes: 'open', mouth: 'smile', look: [1, -0.2] },
     },
   },
   {
@@ -104,14 +98,13 @@ export const POSES: PoseDef[] = [
     name: 'QR platba',
     use: 'Obrazovka platby — naskenuj a zaplať',
     pose: {
-      tilt: -5,
-      turn: 0.15,
+      tilt: -4,
+      turn: 0.1,
       armL: hangL,
-      armR: { upper: 72, fore: -78, hand: 'hold' },
-      legL: standL,
-      legR: standR,
-      face: { eyes: 'open', brows: 'raised', mouth: 'grin' },
-      held: { kind: 'phone', hand: 'R', dx: 38, dy: 4, rot: 5, scale: 1.3 },
+      armR: { upper: 58, fore: -96, front: true },
+      face: { eyes: 'open', mouth: 'grin' },
+      held: { kind: 'phone', hand: 'R', along: 24, rot: 6 },
+      noSparkle: true,
     },
   },
   {
@@ -120,13 +113,12 @@ export const POSES: PoseDef[] = [
     name: 'Ušetřil!',
     use: 'Přehled úspor, měsíční shrnutí',
     pose: {
-      tilt: -4,
+      lean: -2,
       armL: hipL,
-      armR: { upper: -38, fore: -82, hand: 'hold' },
-      legL: standL,
-      legR: standR,
-      face: { eyes: 'wide', brows: 'raised', mouth: 'grin', look: [0.6, -0.6], blush: 1.3 },
-      held: { kind: 'coin', hand: 'R', dx: 34, dy: 0, rot: 0, scale: 1.25 },
+      armR: { upper: -62, fore: -104 },
+      face: { eyes: 'wide', mouth: 'grin', look: [0.5, -0.7], blush: 1.3 },
+      held: { kind: 'coin', hand: 'R', along: 26, scale: 0.8 },
+      noSparkle: true,
     },
     extras: ['sparkles'],
   },
@@ -136,15 +128,12 @@ export const POSES: PoseDef[] = [
     name: 'Hledá',
     use: 'Vyhledávání v katalogu, žádné výsledky',
     pose: {
-      lean: 5,
-      tilt: 6,
-      turn: 0.6,
+      lean: 4,
+      turn: 0.5,
       armL: hangL,
-      armR: { upper: 22, fore: -58, hand: 'hold' },
-      legL: standL,
-      legR: standR,
-      face: { eyes: 'wide', brows: 'focused', mouth: 'o', look: [1, 0] },
-      held: { kind: 'magnifier', hand: 'R', dx: 14, dy: 0, rot: 10, scale: 1.05 },
+      armR: { upper: 70, fore: -140, front: true },
+      face: { eyes: 'wide', mouth: 'o', look: [1, 0] },
+      held: { kind: 'magnifier', hand: 'R', along: 10, rot: 8 },
     },
   },
   {
@@ -154,11 +143,11 @@ export const POSES: PoseDef[] = [
     use: 'Uloženo, hotovo, všechno sedí',
     pose: {
       tilt: -3,
+      turn: 0.1,
       armL: hangL,
-      armR: { upper: 62, fore: -58, hand: 'thumb', twist: 58 },
-      legL: standL,
-      legR: standR,
-      face: { eyes: 'wink', brows: 'raised', mouth: 'grin' },
+      armR: { upper: 22, fore: -78, front: true, thumb: true },
+      face: { eyes: 'wink', mouth: 'grin' },
+      noSparkle: true,
     },
   },
   {
@@ -167,14 +156,13 @@ export const POSES: PoseDef[] = [
     name: 'Krčí rameny',
     use: 'Chyba, nic tu není, stránka nenalezena',
     pose: {
-      tilt: 8,
-      armL: { upper: 122, fore: 192, hand: 'flat', flip: true },
-      armR: { upper: 58, fore: -12, hand: 'flat' },
-      legL: standL,
-      legR: standR,
-      face: { eyes: 'open', brows: 'worried', mouth: 'teeth', look: [0, -0.3] },
+      tilt: 6,
+      armL: { upper: 168, fore: -128 },
+      armR: { upper: 12, fore: -52 },
+      face: { eyes: 'open', mouth: 'teeth', look: [0, -0.4] },
+      noSparkle: true,
     },
-    extras: ['question'],
+    extras: ['question', 'sweat'],
   },
   {
     id: 'nese',
@@ -182,14 +170,12 @@ export const POSES: PoseDef[] = [
     name: 'Nese úspory',
     use: 'Kolik jsi letos ušetřil',
     pose: {
-      tilt: 4,
-      turn: -0.2,
-      armL: hipL,
-      armR: { upper: 84, fore: 90, hand: 'hold', twist: 0 },
-      legL: standL,
-      legR: standR,
-      face: { eyes: 'happy', brows: 'neutral', mouth: 'grin' },
-      held: { kind: 'bag', hand: 'R', dx: 24, dy: 0, rot: 0, scale: 1.2 },
+      tilt: 3,
+      turn: -0.15,
+      armL: hangL,
+      armR: { upper: 100, fore: -25, front: true },
+      face: { eyes: 'happy', mouth: 'grin' },
+      held: { kind: 'bag', hand: 'R', along: 6, scale: 0.9 },
     },
     extras: ['coins'],
   },
@@ -199,12 +185,10 @@ export const POSES: PoseDef[] = [
     name: 'Čeká',
     use: 'Čeká se na platbu od člena',
     pose: {
-      tilt: 9,
-      armL: { upper: 74, fore: -8, hand: 'fist', watch: true },
+      tilt: 2,
+      armL: { upper: 160, fore: -75, front: true, watch: true },
       armR: hangR,
-      legL: standL,
-      legR: standR,
-      face: { eyes: 'half', brows: 'worried', mouth: 'flat', look: [0.3, 1] },
+      face: { eyes: 'half', mouth: 'flat', look: [-1, -0.1] },
     },
   },
   {
@@ -213,13 +197,12 @@ export const POSES: PoseDef[] = [
     name: 'Poslouchá',
     use: 'Hudební předplatné, Spotify skupiny',
     pose: {
-      tilt: -7,
+      tilt: -6,
       phonesOn: true,
       armL: hangL,
-      armR: { upper: -5, fore: -130, hand: 'flat', flip: true },
-      legL: standL,
-      legR: { thigh: 86, shin: 94, toe: -8 },
-      face: { eyes: 'closed', brows: 'neutral', mouth: 'smile', blush: 1.3 },
+      armR: { upper: 30, fore: -115, front: true },
+      face: { eyes: 'closed', mouth: 'smile', blush: 1.3 },
+      noSparkle: true,
     },
     extras: ['notes'],
   },
@@ -229,12 +212,10 @@ export const POSES: PoseDef[] = [
     name: 'Zve do skupiny',
     use: 'Pozvánka — „pojď k nám, je tu volné místo“',
     pose: {
-      tilt: 4,
-      armL: { upper: 158, fore: -168, hand: 'open', flip: true },
-      armR: { upper: 22, fore: -12, hand: 'open' },
-      legL: standL,
-      legR: standR,
-      face: { eyes: 'open', brows: 'raised', mouth: 'grin', blush: 1.2 },
+      armL: { upper: -152, fore: -118 },
+      armR: { upper: -28, fore: -62 },
+      face: { eyes: 'open', mouth: 'grin', blush: 1.3 },
+      noSparkle: true,
     },
     extras: ['hearts'],
   },
@@ -245,15 +226,43 @@ export const POSES: PoseDef[] = [
     use: 'Úvod webu, první spuštění appky',
     seat: true,
     pose: {
-      y: 22,
-      tilt: -5,
-      turn: -0.1,
-      armL: { upper: 96, fore: 78, hand: 'relaxed' },
-      armR: { upper: -30, fore: -84, hand: 'open' },
-      legL: { thigh: 112, shin: 94, thighLen: 20, toe: 6 },
-      legR: { thigh: 68, shin: 86, thighLen: 20, toe: -6 },
-      face: { eyes: 'open', brows: 'raised', mouth: 'grin' },
+      y: -98,
+      tilt: -4,
+      armL: { upper: 132, fore: 84 },
+      armR: { upper: -45, fore: -84 },
+      footL: { x: 8, y: 18, r: 8 },
+      footR: { x: -8, y: 18, r: -8 },
+      face: { eyes: 'open', mouth: 'grin' },
     },
+  },
+  {
+    id: 'visi',
+    motion: 'dangle',
+    name: 'Visí',
+    use: 'Stažení seznamu dolů — obnovení v appce',
+    pose: {
+      armL: { upper: -100, fore: -93 },
+      armR: { upper: -80, fore: -87 },
+      footL: { x: 9, y: -3, r: 12 },
+      footR: { x: -9, y: -3, r: -12 },
+      face: { eyes: 'open', mouth: 'smile', look: [0, -0.6] },
+      noSparkle: true,
+    },
+  },
+  {
+    id: 'spi',
+    motion: 'sleep',
+    name: 'Spí',
+    use: 'Noční režim, patička webu, nic nového',
+    pose: {
+      lean: 2,
+      tilt: 7,
+      squash: 0.98,
+      armL: { upper: 138, fore: 80 },
+      armR: { upper: 42, fore: 100 },
+      face: { eyes: 'closed', mouth: 'o', look: [0, 0.5] },
+    },
+    extras: ['zzz'],
   },
 ]
 

@@ -3,38 +3,40 @@ import { useId } from 'react'
 import styles from './usetrilek.module.css'
 import * as art from './art'
 import type { Face } from './rig'
-import { PaintDefs, Shapes } from './ShapeSvg'
+import { Shapes } from './ShapeSvg'
 import { group, type Shape } from './shapes'
 
 export { Puppet as Usetrilek, type PuppetProps as UsetrilekProps } from './Puppet'
 
+/** The ball with a margin, for the face on its own. */
+const [bx, by, bw, bh] = art.BALL_BOX
+const PAD = 8
+
 /**
- * Just his head, for expression sheets and avatars: one flat <svg>, no puppet.
- * `turn` slides the features the way the puppet does for a three-quarter look.
+ * Just the ball and his face, for expression sheets and avatars: one flat <svg>, no
+ * puppet. `turn` slides the features round the ball the way the puppet does.
  */
 export function UsetrilekFace({ face, turn = 0, size = 120, className }: { face: Face; turn?: number; size?: number; className?: string }) {
   const uid = `uf${useId().replace(/[^a-zA-Z0-9]/g, '')}`
   const look = face.look ?? [0, 0]
-  const brow = (side: 'L' | 'R') => {
-    const at = side === 'L' ? art.EYE_L : art.EYE_R
-    const b = art.browPose(face.brows, side)
-    return group(art.brow(side === 'R'), `translate(${at.x} ${art.BROW_Y + b.y}) rotate(${b.r})`)
-  }
-  const shift = (dx: number, kids: Shape[]) => group(kids, `translate(${dx} 0)`)
+  const shift = (dx: number, dy: number, kids: Shape[], op?: number) => group(kids, `translate(${dx} ${dy})`, op)
 
   const shapes: Shape[] = [
-    shift(-turn * 2.8, art.ears()),
-    ...art.skull(),
-    shift(turn * 7, [group(art.blush(), undefined, Math.min(1, (face.blush ?? 1) * 0.68)), brow('L'), brow('R'), ...art.mouth(face.mouth)]),
-    shift(turn * 9.45, art.nose()),
-    ...art.hair(),
+    ...art.ball(),
+    shift(turn * 18, 0, art.blush(), Math.min(1, face.blush ?? 1)),
+    shift(turn * 26, 0, art.mouth(face.mouth)),
   ]
-  const eyes = group(art.eyes(face.eyes), `translate(${turn * 7 + look[0] * 2.4} ${look[1] * 2})`)
+  const eyes = shift(turn * 22 + look[0] * 10, look[1] * 8.75, art.eyes(face.eyes))
   const blinks = face.eyes === 'open' || face.eyes === 'wide' || face.eyes === 'half'
 
   return (
-    <svg viewBox="100 26 100 124" width={size} height={(size * 124) / 100} className={className} aria-hidden="true">
-      <PaintDefs uid={uid} />
+    <svg
+      viewBox={`${bx - PAD} ${by - PAD} ${bw + PAD * 2} ${bh + PAD * 2}`}
+      width={size}
+      height={(size * (bh + PAD * 2)) / (bw + PAD * 2)}
+      className={className}
+      aria-hidden="true"
+    >
       <Shapes shapes={shapes} uid={uid} local={`${uid}s`} />
       <g className={blinks ? styles.blink : undefined} style={{ transformOrigin: `150px ${art.EYE_L.y}px` }}>
         <Shapes shapes={[eyes]} uid={uid} local={`${uid}e`} />
